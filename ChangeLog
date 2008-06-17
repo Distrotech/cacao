@@ -1,9 +1,290 @@
+2008-06-17  Christian Thalinger  <twisti@complang.tuwien.ac.at>
+
+	* configure.ac:
+	* configure.ac (AC_INIT): Bumped version to 0.99.1. (OPT_CFLAGS):
+	Set -O2.
+	[f53ef222e4a0] [tip]
+
+	* tests/regression/bugzilla/All.java:
+	* tests/regression/bugzilla/All.java: Removed accidentally added
+	PR70.
+	[86c45045090d]
+
+	* tests/regression/base/All.java,
+	tests/regression/base/TestExceptionInStaticClassInitializer.java,
+	tests/regression/base/TestPatcher.java,
+	tests/regression/bugzilla/All.java,
+	tests/regression/bugzilla/PR52.java,
+	tests/regression/bugzilla/PR57.java,
+	tests/regression/bugzilla/PR58.java,
+	tests/regression/bugzilla/PR65.java,
+	tests/regression/bugzilla/PR80.java:
+	* tests/regression/base/All.java,
+	tests/regression/base/TestExceptionInStaticClassInitializer.java,
+	tests/regression/base/TestPatcher.java,
+	tests/regression/bugzilla/All.java,
+	tests/regression/bugzilla/PR52.java,
+	tests/regression/bugzilla/PR57.java,
+	tests/regression/bugzilla/PR58.java,
+	tests/regression/bugzilla/PR65.java,
+	tests/regression/bugzilla/PR80.java: Ported to JUnit 4.
+	[877abcd9243d]
+
+	* NEWS:
+	* NEWS: Added 0.99.1 release notes.
+	[268018a4e616]
+
+	* configure.ac:
+	* configure.ac ($host_os): Moved *kfreebsd*-gnu before *freebsd*.
+	[1384888f31fb]
+
+	* configure.ac:
+	* configure.ac ($host_os): Moved *kfreebsd*-gnu before *freebsd*.
+	[073aa5c74e95]
+
+	* THIRDPARTY, contrib/svn2cl.xsl:
+	* THIRDPARTY: Updated.
+	* contrib/svn2cl.xsl: Removed.
+	[ffbc59261a4f]
+
+	* THIRDPARTY, contrib/svn2cl.xsl:
+	* THIRDPARTY: Updated.
+	* contrib/svn2cl.xsl: Removed.
+	[231bce804212]
+
+	* contrib/Makefile.am:
+	* contrib/Makefile.am (EXTRA_DIST): New and added mapfile-vers-
+	product.
+	[9f2c8d484596]
+
+	* contrib/Makefile.am:
+	* contrib/Makefile.am (EXTRA_DIST): New and added mapfile-vers-
+	product.
+	[ecaed63de347]
+
+	* src/mm/boehm-gc/Makefile.am, src/mm/boehm-
+	gc/libatomic_ops-1.2/doc/Makefile.am, src/mm/boehm-
+	gc/libatomic_ops-1.2/mkinstalldirs, src/mm/boehm-
+	gc/libatomic_ops-1.2/src/Makefile.am, src/mm/boehm-
+	gc/libatomic_ops-1.2/src/atomic_ops/Makefile.am, src/mm/boehm-
+	gc/libatomic_ops-1.2/src/atomic_ops/sysdeps/Makefile.am, src/mm
+	/boehm-gc/libatomic_ops-1.2/tests/test_atomic_include.h:
+	* src/mm/boehm-gc/Makefile.am (DISTCLEANFILES): Added.
+	* src/mm/boehm-gc/libatomic_ops-1.2/doc/Makefile.am: Don't install
+	files.
+	* src/mm/boehm-gc/libatomic_ops-1.2/src/Makefile.am, src/mm/boehm-
+	gc/libatomic_ops-1.2/src/atomic_ops/Makefile.am, src/mm/boehm-
+	gc/libatomic_ops-1.2/src/atomic_ops/sysdeps/Makefile.am: Likewise.
+	* src/mm/boehm-gc/libatomic_ops-1.2/tests/test_atomic_include.h:
+	Something changed.
+	* src/mm/boehm-gc/libatomic_ops-1.2/mkinstalldirs: Removed.
+	[470eb4c47a42]
+
+	* src/vm/jit/intrp/Makefile.am:
+	* src/vm/jit/intrp/Makefile.am (EXTRA_DIST): Removed BUILT_SOURCES.
+	[774bfd75688c]
+
+	* src/mm/boehm-gc/Makefile.am, src/mm/boehm-
+	gc/libatomic_ops-1.2/doc/Makefile.am, src/mm/boehm-
+	gc/libatomic_ops-1.2/mkinstalldirs, src/mm/boehm-
+	gc/libatomic_ops-1.2/src/Makefile.am, src/mm/boehm-
+	gc/libatomic_ops-1.2/src/atomic_ops/Makefile.am, src/mm/boehm-
+	gc/libatomic_ops-1.2/src/atomic_ops/sysdeps/Makefile.am, src/mm
+	/boehm-gc/libatomic_ops-1.2/tests/test_atomic_include.h:
+	* src/mm/boehm-gc/Makefile.am (DISTCLEANFILES): Added.
+	* src/mm/boehm-gc/libatomic_ops-1.2/doc/Makefile.am: Don't install
+	files.
+	* src/mm/boehm-gc/libatomic_ops-1.2/src/Makefile.am, src/mm/boehm-
+	gc/libatomic_ops-1.2/src/atomic_ops/Makefile.am, src/mm/boehm-
+	gc/libatomic_ops-1.2/src/atomic_ops/sysdeps/Makefile.am: Likewise.
+	* src/mm/boehm-gc/libatomic_ops-1.2/tests/test_atomic_include.h:
+	Something changed.
+	* src/mm/boehm-gc/libatomic_ops-1.2/mkinstalldirs: Removed.
+	[b04fce856333]
+
+	* src/vm/jit/intrp/Makefile.am:
+	* src/vm/jit/intrp/Makefile.am (EXTRA_DIST): Removed BUILT_SOURCES.
+	[fb4d6f584893]
+
+	* Makefile.am:
+	* Makefile.am (EXTRA_DIST): Added ChangeLog-2006, ChangeLog-2007.
+	[97a8aff9b66d]
+
+	* src/mm/boehm-gc/Makefile.am:
+	* src/mm/boehm-gc/Makefile.am (EXTRA_DIST): Removed libtool.m4.
+	[f455432c60f8]
+
+	* Makefile.am:
+	* Makefile.am (EXTRA_DIST): Added ChangeLog-2006, ChangeLog-2007.
+	[7b111ee4736e]
+
+	* src/mm/boehm-gc/Makefile.am:
+	* src/mm/boehm-gc/Makefile.am (EXTRA_DIST): Removed libtool.m4.
+	[4459a6ba3156]
+
+	* src/threads/thread.c:
+	* src/threads/thread.c (thread_detach_current_external_thread)
+	[ENABLE_GC_BOEHM]: Don't detach main thread.
+	[3e53ea4b2f00]
+
+	* src/threads/thread.c:
+	* src/threads/thread.c (thread_detach_current_external_thread)
+	[ENABLE_GC_BOEHM]: Don't detach main thread.
+	[f01b86ba04b6]
+
+	* configure.ac, src/mm/boehm-gc/Makefile.am, src/mm/boehm-
+	gc/include/include.am:
+	* configure.ac (AC_PROG_RANLIB): Removed.
+	* src/mm/boehm-gc/Makefile.am (include_HEADERS, pkginclude_HEADERS):
+	Commented to not install include/gc.
+	* src/mm/boehm-gc/include/include.am (include_HEADERS): Made
+	dist_noinst_HEADERS to not install headers.
+	[5d2b6d28bfa5]
+
+	* configure.ac, src/mm/boehm-gc/Makefile.am, src/mm/boehm-
+	gc/include/include.am:
+	* configure.ac (AC_PROG_RANLIB): Removed.
+	* src/mm/boehm-gc/Makefile.am (include_HEADERS, pkginclude_HEADERS):
+	Commented to not install include/gc.
+	* src/mm/boehm-gc/include/include.am (include_HEADERS): Made
+	dist_noinst_HEADERS to not install headers.
+	[8471ab91ccd5]
+
+2008-06-16  Christian Thalinger  <twisti@complang.tuwien.ac.at>
+
+	* configure.ac, src/cacao/Makefile.am:
+	* configure.ac (AC_SUBST): Added JAVA_ARCH.
+	* src/cacao/Makefile.am [WITH_JAVA_RUNTIME_LIBRARY_OPENJDK] (install-
+	data-local, uninstall-local): New targets creating files required
+	for OpenJDK.
+	[8871f6796f2e]
+
+	* configure.ac, src/cacao/Makefile.am:
+	* configure.ac (AC_SUBST): Added JAVA_ARCH.
+	* src/cacao/Makefile.am [WITH_JAVA_RUNTIME_LIBRARY_OPENJDK] (install-
+	data-local, uninstall-local): New targets creating files required
+	for OpenJDK.
+	[59d547e55461]
+
+	* src/native/vm/nativevm.c, src/native/vm/openjdk/hpi.c,
+	src/native/vm/openjdk/jvm.c:
+	* src/native/vm/nativevm.c (nativevm_preinit): Removed libltdl
+	stuff.
+	* src/native/vm/openjdk/hpi.c (hpi_initialize): Likewise.
+	* src/native/vm/openjdk/jvm.c (ltdl.h): Removed.
+	(JVM_FindLibraryEntry): Use HPI function.
+	[b1d09d066062]
+
+	* src/native/vm/nativevm.c, src/native/vm/openjdk/hpi.c,
+	src/native/vm/openjdk/jvm.c:
+	* src/native/vm/nativevm.c (nativevm_preinit): Removed libltdl
+	stuff.
+	* src/native/vm/openjdk/hpi.c (hpi_initialize): Likewise.
+	* src/native/vm/openjdk/jvm.c (ltdl.h): Removed.
+	(JVM_FindLibraryEntry): Use HPI function.
+	[a0187730179f]
+
+	* src/classes/gnuclasspath/gnu/java/lang/CPStringBuilder.java:
+	* src/classes/gnuclasspath/gnu/java/lang/CPStringBuilder.java:
+	Updated to current CVS version.
+	[c348969dfb45]
+
+	* src/classes/gnuclasspath/gnu/java/lang/CPStringBuilder.java:
+	* src/classes/gnuclasspath/gnu/java/lang/CPStringBuilder.java:
+	Updated to current CVS version.
+	[2ed8d6c3b51f]
+
+	* src/mm/boehm-gc/libtool.m4, src/mm/boehm-gc/mkinstalldirs:
+	* src/mm/boehm-gc/libtool.m4: Removed.
+	* src/mm/boehm-gc/mkinstalldirs: Likewise.
+	[cbe054030670]
+
+	* autogen.sh, src/mm/boehm-gc/autogen.sh, src/mm/boehm-
+	gc/libatomic_ops-1.2/autogen.sh:
+	* autogen.sh: Use autoreconf.
+	* src/mm/boehm-gc/autogen.sh: Removed.
+	* src/mm/boehm-gc/libatomic_ops-1.2/autogen.sh: Removed.
+	[833b1ab8e609]
+
+	* src/mm/boehm-gc/libtool.m4, src/mm/boehm-gc/mkinstalldirs:
+	* src/mm/boehm-gc/libtool.m4: Removed.
+	* src/mm/boehm-gc/mkinstalldirs: Likewise.
+	[8caeeb0f9ea6]
+
+	* autogen.sh, src/mm/boehm-gc/autogen.sh, src/mm/boehm-
+	gc/libatomic_ops-1.2/autogen.sh:
+	* autogen.sh: Use autoreconf.
+	* src/mm/boehm-gc/autogen.sh: Removed.
+	* src/mm/boehm-gc/libatomic_ops-1.2/autogen.sh: Removed.
+	[960f8fabf4ff]
+
+2008-06-15  Christian Thalinger  <twisti@complang.tuwien.ac.at>
+
+	* src/fdlibm/ieeefp.h:
+	* src/fdlibm/ieeefp.h [__i386] (__IEEE_LITTLE_ENDIAN): Added define.
+	[0c7dc073f7bb]
+
+	* src/fdlibm/ieeefp.h:
+	* src/fdlibm/ieeefp.h [__i386] (__IEEE_LITTLE_ENDIAN): Added define.
+	[353b84e663b9]
+
+2008-06-15  Stefan Ring  <stefan@complang.tuwien.ac.at>
+
+	* src/native/jvmti/jvmti.c:
+	* src/native/jvmti/jvmti.c (GetThreadState): Removed incorrect usage
+	of sleeping.
+	[69b92de70c2c]
+
+	* src/threads/posix/thread-posix.c, src/threads/posix/thread-posix.h,
+	src/threads/thread.h:
+	Merged to new trunk.
+	[a9b5d3c8ebb6]
+
+2008-06-14  Stefan Ring  <stefan@complang.tuwien.ac.at>
+
+	* src/vm/signal.c:
+	* src/vm/signal.c (signal_thread_handler): Exit with non-zero status
+	when Ctrl-C is pressed.
+	[799d0577b13f]
+
+2008-06-13  Stefan Ring  <stefan@complang.tuwien.ac.at>
+
+	* src/threads/posix/lock.c, src/threads/posix/thread-posix.c,
+	src/threads/posix/thread-posix.h:
+	* src/threads/posix/thread-posix.h: Removed sleeping flag.
+	* src/threads/posix/thread-posix.c: Likewise.
+	* src/threads/posix/lock.c: Likewise.
+	[2a951f68a838]
+
+	* src/threads/thread.h:
+	* src/threads/thread.h: thread_is_interrupted bugfix.
+	[023499292a55]
+
 2008-06-14  Christian Thalinger  <twisti@complang.tuwien.ac.at>
+
+	* configure.ac:
+	* configure.ac (AC_INIT): Bumped version to 1.1.0pre. (OPT_CFLAGS):
+	Set -O0.
+	[13cf84055d92]
+
+	* configure.ac:
+	* configure.ac (AC_INIT): Bumped version to 1.0.0pre. (OPT_CFLAGS):
+	Set -O0.
+	[44e1d99de3f6]
+
+	* .hgtags:
+	Added tag cacao-0.99 for changeset 633b9803f4f4
+	[b5e781fbf95a]
+
+	* ChangeLog, ChangeLog-2007:
+	* ChangeLog: Updated.
+	* ChangeLog-2007: New file.
+	[633b9803f4f4] [cacao-0.99]
 
 	* configure.ac:
 	* configure.ac (AC_INIT): Bumped version to 0.99. (OPT_CFLAGS): Set
 	to -O2.
-	[ea12d8e7f38d] [tip]
+	[ea12d8e7f38d]
 
 	* NEWS:
 	* NEWS: Added latest 0.99 news.
