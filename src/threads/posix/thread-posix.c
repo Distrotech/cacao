@@ -43,10 +43,6 @@
 
 #include "arch.h"
 
-#if defined(USE_FAKE_ATOMIC_INSTRUCTIONS)
-# include "threads/posix/generic-primitives.h"
-#endif
-
 #include "mm/gc-common.h"
 #include "mm/memory.h"
 
@@ -232,12 +228,6 @@ static pthread_cond_t  cond_join;
 #if defined(ENABLE_GC_CACAO)
 /* semaphore used for acknowleding thread suspension                          */
 static sem_t suspend_ack;
-#endif
-
-/* mutexes used by the fake atomic instructions                               */
-#if defined(USE_FAKE_ATOMIC_INSTRUCTIONS)
-mutex_t _cas_lock = MUTEX_INITIALIZER;
-mutex_t _mb_lock = MUTEX_INITIALIZER;
 #endif
 
 
