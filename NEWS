@@ -1,3 +1,9 @@
+New in release 0.99.2 (July 8, 2008)
+
+  * Rewrite of atomic instructions code. This fixes problems with
+    AWT/Swing programs with OpenJDK.
+  * Fixed PR83, PR89.
+
 New in release 0.99.1 (June 17, 2008)
 
   * Fixed compilation of OpenJDK code (libltdl related).
