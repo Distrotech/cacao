@@ -970,7 +970,7 @@ retry:
 	/* most common case: try to thin-lock an unlocked object */
 
 	LLNI_CRITICAL_START_THREAD(t);
-	lockword = Atomic_compare_and_swap_ptr(&(LLNI_DIRECT(o)->lockword), THIN_UNLOCKED, thinlock);
+	lockword = (ptrint) Atomic_compare_and_swap_ptr((void*) &(LLNI_DIRECT(o)->lockword), THIN_UNLOCKED, (void*) thinlock);
 	LLNI_CRITICAL_END_THREAD(t);
 
 	if (lockword == THIN_UNLOCKED) {
