@@ -60,6 +60,7 @@ static JNINativeMethod methods[] = {
 	{ "nativeStop",        "(Ljava/lang/Throwable;)V", (void *) (intptr_t) &Java_java_lang_VMThread_nativeStop        },
 	{ "currentThread",     "()Ljava/lang/Thread;",     (void *) (intptr_t) &Java_java_lang_VMThread_currentThread     },
 	{ "yield",             "()V",                      (void *) (intptr_t) &Java_java_lang_VMThread_yield             },
+	{ "sleep",             "(JI)V",                    (void *) (intptr_t) &Java_java_lang_VMThread_sleep             },
 	{ "interrupted",       "()Z",                      (void *) (intptr_t) &Java_java_lang_VMThread_interrupted       },
 	{ "holdsLock",         "(Ljava/lang/Object;)Z",    (void *) (intptr_t) &Java_java_lang_VMThread_holdsLock         },
 	{ "getState",          "()Ljava/lang/String;",     (void *) (intptr_t) &Java_java_lang_VMThread_getState          },
@@ -234,6 +235,19 @@ JNIEXPORT void JNICALL Java_java_lang_VMThread_yield(JNIEnv *env, jclass clazz)
 {
 #if defined(ENABLE_THREADS)
 	threads_yield();
+#endif
+}
+
+
+/*
+ * Class:     java/lang/VMThread
+ * Method:    sleep
+ * Signature: (JI)V
+ */
+JNIEXPORT void JNICALL Java_java_lang_VMThread_sleep(JNIEnv *env, jclass clazz, int64_t ms, int32_t ns)
+{
+#if defined(ENABLE_THREADS)
+	threads_sleep(ms, ns);
 #endif
 }
 
