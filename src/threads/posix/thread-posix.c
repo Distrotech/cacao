@@ -1603,20 +1603,30 @@ void threads_sleep(int64_t millis, int32_t nanos)
 		return;
 	}
 
-	threads_calc_absolute_time(&wakeupTime, millis, nanos);
+	/* (Note taken from classpath/vm/reference/java/lang/VMThread.java (sleep))
+	   Note: JDK treats a zero length sleep is like Thread.yield(),
+	   without checking the interrupted status of the thread.  It's
+	   unclear if this is a bug in the implementation or the spec.
+	   See http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6213203 */
+	if (millis == 0 && nanos == 0) {
+		threads_yield();
+	}
+	else {
+		threads_calc_absolute_time(&wakeupTime, millis, nanos);
 
-	threads_wait_with_timeout(t, &wakeupTime);
+		threads_wait_with_timeout(t, &wakeupTime);
 
-	interrupted = thread_is_interrupted(t);
+		interrupted = thread_is_interrupted(t);
 
-	if (interrupted) {
-		thread_set_interrupted(t, false);
+		if (interrupted) {
+			thread_set_interrupted(t, false);
 
-		/* An other exception could have been thrown
-		   (e.g. ThreadDeathException). */
+			/* An other exception could have been thrown
+			   (e.g. ThreadDeathException). */
 
-		if (!exceptions_get_exception())
-			exceptions_throw_interruptedexception();
+			if (!exceptions_get_exception())
+				exceptions_throw_interruptedexception();
+		}
 	}
 }
 
