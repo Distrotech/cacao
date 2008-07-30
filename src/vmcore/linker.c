@@ -326,6 +326,9 @@ void linker_init(void)
 		vm_abort("linker_init: linking failed");
 
 # if defined(WITH_JAVA_RUNTIME_LIBRARY_OPENJDK)
+	if (!link_class(class_sun_misc_Signal))
+		vm_abort("linker_init: linking failed");
+
 	if (!link_class(class_sun_reflect_MagicAccessorImpl))
 		vm_abort("linker_init: linking failed");
 # endif
