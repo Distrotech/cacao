@@ -1,3 +1,7 @@
+New in release 0.99.3 (August x, 2008)
+
+  * Fixed PR93 (Process.destroy() now works correctly).
+
 New in release 0.99.2 (July 8, 2008)
 
   * Rewrite of atomic instructions code. This fixes problems with
