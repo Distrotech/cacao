@@ -26,6 +26,7 @@
 #include "config.h"
 
 #include <assert.h>
+#include <errno.h>
 #include <signal.h>
 #include <stdint.h>
 #include <stdlib.h>
