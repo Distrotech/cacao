@@ -1,6 +1,8 @@
 New in release 0.99.3 (August x, 2008)
 
   * Fixed PR93 (Process.destroy() now works correctly).
+  * Yield threads when sleeping time is zero.
+  * Implemented sun.misc.Unsafe.putFloat(JF)V
 
 New in release 0.99.2 (July 8, 2008)
 
