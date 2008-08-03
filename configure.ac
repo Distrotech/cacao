@@ -64,7 +64,7 @@ hppa2.0 )
 
 i386 | i486 | i586 | i686 )
     ARCH_DIR="i386"
-    ARCH_CFLAGS="-D__I386__"
+    ARCH_CFLAGS="-m32 -D__I386__"
     JAVA_ARCH="i386"
     ;;
 
@@ -83,13 +83,13 @@ mips | mipsel )
 
 powerpc )
     ARCH_DIR="powerpc"
-    ARCH_CFLAGS="-D__POWERPC__"
+    ARCH_CFLAGS="-m32 -D__POWERPC__"
     JAVA_ARCH="ppc"
     ;;
 
 powerpc64 )
     ARCH_DIR="powerpc64"
-    ARCH_CFLAGS="-D__POWERPC64__"
+    ARCH_CFLAGS="-m64 -D__POWERPC64__"
     JAVA_ARCH="ppc64"
     ;;
 
@@ -108,7 +108,7 @@ sparc | sparc64 )
 
 x86_64 )
     ARCH_DIR="x86_64"
-    ARCH_CFLAGS="-D__X86_64__"
+    ARCH_CFLAGS="-m64 -D__X86_64__"
     JAVA_ARCH="amd64"
     ;;
 
