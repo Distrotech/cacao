@@ -77,6 +77,7 @@
 #include "vm/builtin.h"
 #include "vm/exceptions.h"
 #include "vm/global.h"
+#include "vm/signallocal.h"
 #include "vm/stringlocal.h"
 #include "vm/vm.h"
 
@@ -1561,7 +1562,7 @@ void threads_thread_interrupt(threadobject *thread)
 
 	/* Interrupt blocking system call using a signal. */
 
-	pthread_kill(thread->tid, SIGHUP);
+	pthread_kill(thread->tid, Signal_INTERRUPT_SYSTEM_CALL);
 
 	if (thread->sleeping)
 		pthread_cond_signal(&thread->waitcond);
