@@ -50,7 +50,7 @@ alpha | alphaev56 | alphapca56 )
     JAVA_ARCH="alpha"
     ;;
 
-arm | armv4 | armv4tl | armv5b | armv5l | armv5tejl )
+arm | armv4 | armv4tl | armv5b | armv5l | armv5tel | armv5tejl )
     ARCH_DIR="arm"
     ARCH_CFLAGS="-D__ARM__"
     JAVA_ARCH="arm"
