@@ -1,4 +1,4 @@
-New in release 0.99.3 (August x, 2008)
+New in release 0.99.3 (August 12, 2008)
 
   * Fixed PR93 (Process.destroy() now works correctly).
   * Yield threads when sleeping time is zero.
