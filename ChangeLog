@@ -1,9 +1,132 @@
+2008-08-12  Christian Thalinger  <twisti@complang.tuwien.ac.at>
+
+	* configure.ac:
+	* configure.ac (AC_INIT): Bumped version to 0.99.3.
+	[b9ea707d65de]
+
+	* NEWS:
+	* NEWS: Set release date for 0.99.3.
+	[8fee40eb81ca]
+
+2008-08-06  Christian Thalinger  <twisti@complang.tuwien.ac.at>
+
+	* src/threads/posix/thread-posix.c, src/vm/signal.c,
+	src/vm/signallocal.h:
+	* src/vm/signallocal.h (Signal_THREAD_INTERRUPT): Renamed to
+	Signal_INTERRUPT_SYSTEM_CALL and defined to (__SIGRTMAX - 2) for
+	Linux. We will ses what OpenJDK wants on other OSes, like BSD.
+	* src/vm/signal.c (signal_init): Use new define name.
+	(signal_thread_handler) [!WITH_JAVA_RUNTIME_LIBRARY_OPENJDK]: Added
+	default case and abort.
+	* src/threads/posix/thread-posix.cpp (threads_thread_interrupt): Use
+	new define name.
+	[fb9f2b66b4a1]
+
+	* configure.ac:
+	* configure.ac (host_cpu): Added armv5tel.
+	[220ac249a4f7]
+
+2008-07-30  Christian Thalinger  <twisti@complang.tuwien.ac.at>
+
+	* configure.ac:
+	* configure.ac: Added armv5tejl to supported ARM architectures.
+	[939a4468b715]
+
+2008-08-03  Christian Thalinger  <twisti@complang.tuwien.ac.at>
+
+	* configure.ac:
+	* configure.ac (i?86): Added -m32. (powerpc): Likewise. (powerpc64):
+	Added -m64.
+	[f69c19eb78fd]
+
+2008-08-01  Christian Thalinger  <twisti@complang.tuwien.ac.at>
+
+	* NEWS:
+	* NEWS: Added 0.99.3 news.
+	[d02686800405]
+
+	* NEWS:
+	* NEWS: Added 0.99.3 release notes.
+	[07bd7f3a216d]
+
+	* src/vm/signal.c:
+	* src/vm/signal.c (errno.h): Added.
+	[ee99c88f7cfa]
+
+	* src/vm/signal.c:
+	* src/vm/signal.c (signal_thread): Restart sigwait if it has been
+	interrupted. This currently only works for Linux.
+	[78be3d46bb1c]
+
+2008-07-30  Christian Thalinger  <twisti@complang.tuwien.ac.at>
+
+	* src/native/vm/openjdk/jvm.c, src/vm/signal.c, src/vmcore/class.c,
+	src/vmcore/class.h, src/vmcore/linker.c, src/vmcore/loader.c,
+	src/vmcore/utf8.c, src/vmcore/utf8.h:
+	Fixes PR93.
+	* src/native/vm/openjdk/jvm.c (JVM_RegisterSignal): Use same flags as
+	HotSpot.
+	* src/vm/signal.c (signal_thread_handler)
+	[WITH_JAVA_RUNTIME_LIBRARY_OPENJDK]: Dispatch unknown signals to
+	Java.
+	* src/vmcore/class.c [WITH_JAVA_RUNTIME_LIBRARY_OPENJDK]
+	(class_sun_misc_Signal): New global variable.
+	* src/vmcore/class.h: Likewise.
+	* src/vmcore/linker.c (linker_init)
+	[WITH_JAVA_RUNTIME_LIBRARY_OPENJDK]: Link class_sun_misc_Signal.
+	* src/vmcore/loader.c (loader_init)
+	[WITH_JAVA_RUNTIME_LIBRARY_OPENJDK]: Load class_sun_misc_Signal.
+	* src/vmcore/utf8.c (utf_dispatch): New global variable. (utf8_init):
+	Initialize utf_dispatch.
+	* src/vmcore/utf8.h: Likewise.
+	[91ca9cb09a79]
+
+2008-07-28  Christian Thalinger  <twisti@complang.tuwien.ac.at>
+
+	* src/native/vm/sun_misc_Unsafe.c:
+	* src/native/vm/sun_misc_Unsafe.c (putFloat): Implemented.
+	[ed74fb67a1e1]
+
+2008-07-26  Christian Thalinger  <twisti@complang.tuwien.ac.at>
+
+	* src/classes/gnuclasspath/java/lang/VMThread.java,
+	src/native/vm/gnuclasspath/java_lang_VMThread.c:
+	* src/classes/gnuclasspath/java/lang/VMThread.java (sleep): Made
+	native.
+	* src/native/vm/gnuclasspath/java_lang_VMThread.c (sleep): New
+	function.
+	[8bec6a021c4b]
+
+	* src/threads/posix/thread-posix.c:
+	* src/threads/posix/thread-posix.c (threads_sleep): Yield the thread
+	when sleep time is zero.
+	[9ae963430bd6]
+
+	* configure.ac:
+	* configure.ac (AC_INIT): Bumped version to 0.99.3pre.
+	[167d4e010873]
+
+2008-07-24  Christian Thalinger  <twisti@complang.tuwien.ac.at>
+
+	* src/cacao/Makefile.am:
+	* src/cacao/Makefile.am (libjvm_la_LDFLAGS): Use -avoid-version
+	instead of -version-info.
+	[292f83dbbbe1]
+
 2008-07-08  Christian Thalinger  <twisti@complang.tuwien.ac.at>
+
+	* .hgtags:
+	Added tag cacao-0.99.2 for changeset 05da71d55c67
+	[31fda447b5d3]
+
+	* ChangeLog:
+	* ChangeLog: Updated.
+	[05da71d55c67] [cacao-0.99.2]
 
 	* configure.ac:
 	* configure.ac (AC_INIT): Bumped version to 0.99.2. (OPT_CFLAGS):
 	Set to -O2.
-	[588da1f5a429] [tip]
+	[588da1f5a429]
 
 	* NEWS:
 	* NEWS: Added 0.99.2 news.
@@ -14,20 +137,7 @@
 	* src/vm/jit/arm/asmpart.S (asm_vm_call_method_float)
 	(asm_vm_call_method_double): Call the real function and removed the
 	debugging functions.
-	[649d426a9c91]
-
-	* src/vm/jit/arm/asmpart.S:
-	Fixed PR89.
-	* src/vm/jit/arm/asmpart.S (asm_vm_call_method_float)
-	(asm_vm_call_method_double): Call the real function and removed the
-	debugging functions.
 	[977d67511f9c]
-
-	* tests/regression/bugzilla/All.java,
-	tests/regression/bugzilla/PR89.java:
-	* tests/regression/bugzilla/All.java: Added PR89.
-	* tests/regression/bugzilla/PR89.java: New file.
-	[b66bf58536f9]
 
 	* src/threads/posix/lock.c:
 	* src/threads/posix/lock.c (lock_monitor_enter): Fixed compiler
@@ -54,13 +164,6 @@
 	(compareAndSwapInt, compareAndSwapLong): Removed #if 0.
 	[847635391faa]
 
-2008-07-08  Christian Thalinger  <twisti@complang.tuwien.ac.at>
-
-	* src/native/vm/sun_misc_Unsafe.c:
-	* src/native/vm/sun_misc_Unsafe.c (getDoubleVolatile): Added and
-	implemented.
-	[db081a1677cf]
-
 2008-07-07  Christian Thalinger  <twisti@complang.tuwien.ac.at>
 
 	* src/vm/jit/mips/asmpart.S:
@@ -81,113 +184,7 @@
 	configure.
 	[aa0e8f86df17]
 
-	* src/vm/jit/mips/asmpart.S:
-	* src/vm/jit/mips/asmpart.S (asm_handle_exception): Removed
-	comments.
-	[2effc42cfb01]
-
-	* src/vm/jit/mips/asmpart.S:
-	* src/vm/jit/mips/asmpart.S (asm_handle_exception) [SIZEOF_VOID_P ==
-	4 && !ENABLE_SOFT_FLOAT]: Fixed offsets when restoring floating
-	point registers.
-	[96a125f9de83]
-
-	* src/mm/boehm-gc/include/private/gcconfig.h:
-	* src/mm/boehm-gc/include/private/gcconfig.h: Added __sun, since sun
-	is not defined when compiling with standard C.
-	[4574d1361120]
-
-	* m4/java-runtime-library.m4:
-	* m4/java-runtime-library.m4
-	(AC_CHECK_WITH_BUILD_JAVA_RUNTIME_LIBRARY_CLASSES): Don't escape
-	variable for BOOTCLASSPATH. This should get javac working during
-	configure.
-	[b23fc77b4a0e]
-
-	* configure.ac:
-	* configure.ac (AC_CHECK_LIB): Check for socket on Solaris.
-	[224b9bb32252]
-
-2008-07-06  Christian Thalinger  <twisti@complang.tuwien.ac.at>
-
-	* src/vm/jit/mips/md-atomic.hpp:
-	* src/vm/jit/mips/md-atomic.hpp (memory_barrier): Renamed to
-	instruction_barrier (duplicate name typo).
-	[7a94ddeed8ca]
-
-	* src/vm/jit/arm/md-atomic.hpp:
-	* src/vm/jit/arm/md-atomic.hpp (compare_and_swap_64): Renamed to
-	compare_and_swap (typo).
-	[47292eab2d6d]
-
-2008-07-06  Andreas HUBERT  <andreas.hubert@gmx.at>
-
-	* .hgignore, src/cacaoh/dummy.c, src/vm/exceptions.c,
-	src/vm/exceptions.h, src/vmcore/chararray.c, src/vmcore/chararray.h,
-	src/vmcore/class.c, src/vmcore/javastring.c,
-	src/vmcore/javastring.h, src/vmcore/stringconst.c,
-	src/vmcore/stringconst.h:
-	* src/vmcore/chararray.c: Changed exception handling.
-	* src/vmcore/javastring.c: Changed exception handling.
-	* src/vm/exceptions.c (exceptions_throw_utfdataformatexception)
-	Added.
-	* src/vmcore/stringconst.c (js_java_lang_UTFDataFormatException)
-	Added.
-	* src/vmcore/dummy.c (exceptions_throw_utfdataformatexception,
-	exceptions_throw_illegalargumentexception) Added.
-	* src/vmcore/class.c (class_set_packagename) Check for end >= start
-	added.
-	[14eda870a1c0]
-
 2008-07-05  Christian Thalinger  <twisti@complang.tuwien.ac.at>
-
-	* src/native/vm/sun_misc_Unsafe.c:
-	* src/native/vm/sun_misc_Unsafe.c (compareAndSwapObject)
-	(compareAndSwapInt, compareAndSwapLong): Removed #if 0.
-	[a03c4af66a39]
-
-	* src/threads/Makefile.am, src/threads/atomic.c,
-	src/threads/atomic.cpp, src/threads/atomic.hpp,
-	src/threads/posix/lock.c, src/vm/jit/alpha/md-atomic.hpp,
-	src/vm/jit/arm/md-atomic.hpp, src/vm/jit/i386/md-atomic.hpp,
-	src/vm/jit/m68k/md-atomic.hpp, src/vm/jit/mips/md-atomic.hpp,
-	src/vm/jit/powerpc/md-atomic.hpp, src/vm/jit/powerpc64/md-
-	atomic.hpp, src/vm/jit/s390/md-atomic.hpp, src/vm/jit/sparc64/md-
-	atomic.hpp, src/vm/jit/x86_64/md-atomic.hpp:
-	* src/threads/atomic.cpp: New file.
-	* src/threads/atomic.c: Removed.
-	* src/threads/Makefile.am (libthreads_la_SOURCES): Removed atomic.c,
-	added atomic.cpp.
-	* src/threads/atomic.hpp: C++'ified.
-	* src/threads/posix/lock.c: Use new atomic function names.
-	* src/vm/jit/alpha/md-atomic.hpp, src/vm/jit/arm/md-atomic.hpp,
-	src/vm/jit/i386/md-atomic.hpp, src/vm/jit/m68k/md-atomic.hpp,
-	src/vm/jit/mips/md-atomic.hpp, src/vm/jit/powerpc/md-atomic.hpp,
-	src/vm/jit/powerpc64/md-atomic.hpp, src/vm/jit/s390/md-atomic.hpp,
-	src/vm/jit/sparc64/md-atomic.hpp, src/vm/jit/x86_64/md-atomic.hpp:
-	C++'ified. (STORE_ORDER_BARRIER, MEMORY_BARRIER_AFTER_ATOMIC):
-	Removed. (write_memory_barrier, instruction_barrier): New functions.
-	[c5ca44e22500]
-
-	* src/threads/posix/lock.c:
-	* src/threads/posix/lock.c (COMPARE_AND_SWAP_OLD_VALUE): Removed.
-	[26c1c4cdd213]
-
-	* src/threads/Makefile.am, src/threads/posix/generic-primitives.h,
-	src/threads/posix/lock.c, src/threads/posix/thread-posix.c,
-	src/vm/jit/alpha/machine-instr.h, src/vm/jit/arm/machine-instr.h,
-	src/vm/jit/asmpart.h, src/vm/jit/i386/machine-instr.h,
-	src/vm/jit/m68k/machine-instr.h, src/vm/jit/mips/machine-instr.h,
-	src/vm/jit/powerpc/machine-instr.h, src/vm/jit/powerpc64/linux/md-
-	os.c, src/vm/jit/powerpc64/machine-instr.h, src/vm/jit/s390/machine-
-	instr.h, src/vm/jit/sparc64/machine-instr.h, src/vm/jit/x86_64
-	/machine-instr.h:
-	* Merged in new atomic instructions (twisti branch).
-	[ccde3fa072f3]
-
-	* src/vm/jit/s390/md-atomic.hpp:
-	* src/vm/jit/s390/md-atomic.hpp (Atomic_memory_barrier): Fixed typo.
-	[ffc149c4ff6c]
 
 	* src/vm/jit/s390/md-atomic.hpp:
 	* src/vm/jit/s390/md-atomic.hpp (Atomic_memory_barrier): Fixed typo.
@@ -360,342 +357,6 @@
 	* src/vm/jit/x86_64/machine-instr.h: Removed.
 	[faeaadb6af57]
 
-2008-07-04  Christian Thalinger  <twisti@complang.tuwien.ac.at>
-
-	* src/vm/jit/sparc64/Makefile.am, src/vm/jit/sparc64/machine-instr.h,
-	src/vm/jit/sparc64/md-atomic.hpp:
-	* src/vm/jit/sparc64/md-atomic.hpp: New file.
-	* src/vm/jit/sparc64/machine-instr.h: Removed.
-	* src/vm/jit/sparc64/Makefile.am (noinst_HEADERS): Removed machine-
-	instr.h, added md-atomic.hpp.
-	[7689c6b9521a]
-
-	* src/vm/jit/s390/Makefile.am, src/vm/jit/s390/machine-instr.h,
-	src/vm/jit/s390/md-atomic.hpp:
-	* src/vm/jit/s390/md-atomic.hpp: New file.
-	* src/vm/jit/s390/machine-instr.h: Removed.
-	* src/vm/jit/s390/Makefile.am (noinst_HEADERS): Removed machine-
-	instr.h, added md-atomic.hpp.
-	[b4508c800ff3]
-
-	* src/vm/jit/arm/md-atomic.hpp, src/vm/jit/i386/md-atomic.hpp,
-	src/vm/jit/mips/md-atomic.hpp, src/vm/jit/powerpc/md-atomic.hpp:
-	* src/vm/jit/arm/md-atomic.hpp (Atomic_compare_and_swap_64): Use
-	generic version.
-	* src/vm/jit/i386/md-atomic.hpp: Likewise.
-	* src/vm/jit/mips/md-atomic.hpp: Likewise.
-	* src/vm/jit/powerpc/md-atomic.hpp: Likewise.
-	[a76c7d9d8a28]
-
-	* src/vm/jit/m68k/Makefile.am, src/vm/jit/m68k/machine-instr.h,
-	src/vm/jit/m68k/md-atomic.hpp:
-	* src/vm/jit/m68k/md-atomic.hpp: New file.
-	* src/vm/jit/m68k/machine-instr.h: Removed.
-	* src/vm/jit/m68k/Makefile.am (noinst_HEADERS): Removed machine-
-	instr.h, added md-atomic.hpp.
-	[419c3cad98a0]
-
-	* src/threads/Makefile.am, src/threads/atomic.c,
-	src/threads/atomic.hpp:
-	* src/threads/atomic.c: New file.
-	* src/threads/atomic.hpp: Export generic functions.
-	* src/threads/Makefile.am (libthreads_la_SOURCES): Added atomic.c.
-	[3a6f75e262f1]
-
-	* src/threads/posix/generic-primitives.h, src/threads/posix/thread-
-	posix.c, src/vm/jit/intrp/engine.c, src/vm/jit/parisc/arch.h:
-	* src/threads/posix/generic-primitives.h: Removed.
-	* src/threads/posix/thread-posix.c: Removed
-	USE_FAKE_ATOMIC_INSTRUCTIONS stuff.
-	* src/vm/jit/intrp/engine.c: Likewise.
-	* src/vm/jit/parisc/arch.h: Likewise.
-	[62de17550a2d]
-
-	* src/vm/jit/powerpc/Makefile.am, src/vm/jit/powerpc/atomic.hpp,
-	src/vm/jit/powerpc/md-atomic.hpp:
-	* src/vm/jit/powerpc/atomic.hpp: Renamed to...
-	* src/vm/jit/powerpc/md-atomic.hpp: New file.
-	* src/vm/jit/powerpc/Makefile.am (noinst_HEADERS): Likewise.
-	[0dd36b9b2a1c]
-
-	* src/vm/jit/mips/Makefile.am, src/vm/jit/mips/asmpart.S,
-	src/vm/jit/mips/machine-instr.h, src/vm/jit/mips/md-atomic.hpp:
-	* src/vm/jit/mips/md-atomic.hpp: New file.
-	* src/vm/jit/mips/machine-instr.h: Removed.
-	* src/vm/jit/mips/Makefile.am (noinst_HEADERS): Removed machine-
-	instr.h, added md-atomic.hpp.
-	* src/vm/jit/mips/asmpart.S (compare_and_swap): Removed.
-	[5dbc79b7e5a4]
-
-	* src/vm/jit/arm/Makefile.am, src/vm/jit/arm/machine-instr.h,
-	src/vm/jit/arm/md-atomic.hpp:
-	* src/vm/jit/arm/md-atomic.hpp: New file.
-	* src/vm/jit/arm/machine-instr.h: Removed.
-	* src/vm/jit/arm/Makefile.am (noinst_HEADERS): Removed machine-
-	instr.h, added md-atomic.hpp.
-	[3cf8a01637cf]
-
-	* * Merged in c3fccb040bf0.
-	[78d6fba489f8]
-
-2008-06-29  Christian Thalinger  <twisti@complang.tuwien.ac.at>
-
-	* src/native/include/Makefile.am, src/native/jvmti/jvmti.c,
-	src/native/vm/gnuclasspath/java_lang_VMClassLoader.c:
-	* src/native/include/Makefile.am (COMMON_HEADER_FILES): Removed
-	java_util_Vector.h.
-	* src/native/jvmti/jvmti.c (native/include/java_util_Vector.h):
-	Removed.
-	* src/native/vm/gnuclasspath/java_lang_VMClassLoader.c
-	(native/include/java_util_Vector.h): Likewise.
-	(Java_java_lang_VMClassLoader_nativeGetResources): Added struct to
-	return type.
-	[c3fccb040bf0]
-
-	* src/native/include/Makefile.am,
-	src/native/vm/gnuclasspath/java_lang_VMRuntime.c:
-	* src/native/include/Makefile.am (JAVASE_HEADER_FILES): Removed
-	java_io_File.h.
-	* src/native/vm/gnuclasspath/java_lang_VMRuntime.c
-	(native/include/java_io_File.h): Removed.
-	[39af40fd12b2]
-
-2008-07-03  Christian Thalinger  <twisti@complang.tuwien.ac.at>
-
-	* src/vm/jit/alpha/Makefile.am, src/vm/jit/alpha/asmpart.S,
-	src/vm/jit/alpha/machine-instr.h, src/vm/jit/alpha/md-atomic.hpp:
-	* src/vm/jit/alpha/md-atomic.hpp: New file.
-	* src/vm/jit/alpha/machine-instr.h: Removed.
-	* src/vm/jit/alpha/Makefile.am (noinst_HEADERS): Removed machine-
-	instr.h, added md-atomic.hpp.
-	* src/vm/jit/alpha/asmpart.S (asm_compare_and_swap): Removed.
-	(asm_memory_barrier): Likewise.
-	[81c49f2e4e4a]
-
-	* src/vm/jit/powerpc64/Makefile.am, src/vm/jit/powerpc64/machine-
-	instr.h, src/vm/jit/powerpc64/md-atomic.hpp:
-	* src/vm/jit/powerpc64/md-atomic.hpp: New file.
-	* src/vm/jit/powerpc64/machine-instr.h: Removed.
-	* src/vm/jit/powerpc64/Makefile.am (noinst_HEADERS): Removed machine-
-	instr.h, added md-atomic.hpp.
-	[84747b26c32d]
-
-	* src/vm/jit/powerpc64/linux/md-os.c:
-	* src/vm/jit/powerpc64/linux/md-os.c (md_executionstate_read): New
-	function, not implemented. (md_executionstate_write): Likewise.
-	[bb85a81bf759]
-
-2008-07-02  Christian Thalinger  <twisti@complang.tuwien.ac.at>
-
-	* src/vm/jit/i386/Makefile.am, src/vm/jit/i386/machine-instr.h,
-	src/vm/jit/i386/md-atomic.hpp:
-	* src/vm/jit/i386/md-atomic.hpp: New file.
-	* src/vm/jit/i386/machine-instr.h: Removed.
-	* src/vm/jit/i386/Makefile.am (noinst_HEADERS): Removed machine-
-	instr.h, added md-atomic.hpp.
-	[c867921736d3]
-
-	* src/vm/jit/x86_64/md-atomic.hpp:
-	* src/vm/jit/x86_64/md-atomic.hpp (Atomic_compare_and_swap_32): Use
-	unsigned return variable. (Atomic_compare_and_swap_64): Likewise.
-	[996ffce649dc]
-
-2008-06-30  Christian Thalinger  <twisti@complang.tuwien.ac.at>
-
-	* src/native/vm/sun_misc_Unsafe.c, src/threads/Makefile.am,
-	src/threads/atomic.hpp, src/threads/posix/lock.c,
-	src/vm/jit/x86_64/Makefile.am, src/vm/jit/x86_64/atomic.hpp,
-	src/vm/jit/x86_64/md-atomic.hpp:
-	* src/native/vm/sun_misc_Unsafe.c (atomic.hpp): Removed.
-	(threads/atomic.hpp): Added.
-	* src/threads/posix/lock.c: Likewise.
-	* src/threads/Makefile.am (libthreads_la_SOURCES): Added atomic.hpp.
-	* src/threads/atomic.hpp: New file.
-	* src/vm/jit/x86_64/Makefile.am (noinst_HEADERS): Removed atomic.hpp,
-	added md-atomic.hpp.
-	* src/vm/jit/x86_64/atomic.hpp: Moved from here...
-	* src/vm/jit/x86_64/md-atomic.hpp: ...to here.
-	[2bfde40a7f86]
-
-	* src/threads/mutex.h, src/threads/posix/mutex-posix.h:
-	* Merged with c259010fc9d5.
-	[a3a8a7520b2d]
-
-	* src/classes/gnuclasspath/sun/reflect/annotation/AnnotationParser.jav
-	a,
-	src/classes/gnuclasspath/sun/reflect/annotation/AnnotationType.java:
-	* src/classes/gnuclasspath/sun/reflect/annotation/AnnotationParser.j
-	ava: Removed umlauts.
-	* src/classes/gnuclasspath/sun/reflect/annotation/AnnotationType.java:
-	Likewise.
-	[dc92e5b729fb]
-
-2008-06-30  Andreas HUBERT  <andreas.hubert@gmx.at>
-
-	* src/vm/exceptions.c, src/vmcore/chararray.c:
-	src/vm/exceptions.c: Changed an occurence of utf_java_lang_Error to
-	js_java_lang_Error src/vmcore/chararray.c: Corrected length-counting
-	in js_from_*. Previously, only characters where counted (which is
-	wrong, as UTF8 may have multi-byte characters und UCS has 2-Byte
-	characters).
-	[e46f3121fbdd]
-
-2008-06-28  Andreas HUBERT  <andreas.hubert@gmx.at>
-
-	* src/vm/jit/codegen-common.c, src/vmcore/class.c,
-	src/vmcore/javastring.c:
-	Corrected errors in js_overwrite and js_is_interned
-	[263972a898a7]
-
-2008-06-22  Andreas HUBERT  <andreas.hubert@gmx.at>
-
-	* .hgignore, src/vmcore/javastring.c:
-	Added testing-code to javastring.c
-	[ff3089eb712a]
-
-2008-06-11  Andreas HUBERT  <andreas.hubert@gmx.at>
-
-	* src/cacaoh/cacaoh.c, src/cacaoh/dummy.c, src/cacaoh/headers.c,
-	src/mm/boehm.c, src/mm/memory.c, src/native/jni.c,
-	src/native/native.c,
-	src/native/vm/gnu/gnu_classpath_VMStackWalker.c,
-	src/native/vm/gnu/gnu_classpath_VMSystemProperties.c, src/native/vm/
-	gnu/gnu_java_lang_management_VMClassLoadingMXBeanImpl.c,
-	src/native/vm/gnu/gnu_java_lang_management_VMMemoryMXBeanImpl.c,
-	src/native/vm/gnu/gnu_java_lang_management_VMRuntimeMXBeanImpl.c,
-	src/native/vm/gnu/gnu_java_lang_management_VMThreadMXBeanImpl.c,
-	src/native/vm/gnu/java_lang_VMClass.c,
-	src/native/vm/gnu/java_lang_VMClassLoader.c,
-	src/native/vm/gnu/java_lang_VMObject.c,
-	src/native/vm/gnu/java_lang_VMRuntime.c,
-	src/native/vm/gnu/java_lang_VMString.c,
-	src/native/vm/gnu/java_lang_VMSystem.c,
-	src/native/vm/gnu/java_lang_VMThread.c,
-	src/native/vm/gnu/java_lang_VMThrowable.c,
-	src/native/vm/gnu/java_lang_management_VMManagementFactory.c,
-	src/native/vm/gnu/java_lang_reflect_Constructor.c,
-	src/native/vm/gnu/java_lang_reflect_Field.c,
-	src/native/vm/gnu/java_lang_reflect_Method.c,
-	src/native/vm/gnu/java_security_VMAccessController.c,
-	src/native/vm/gnu/java_util_concurrent_atomic_AtomicLong.c,
-	src/native/vm/gnu/sun_reflect_ConstantPool.c,
-	src/native/vm/java_lang_Class.c,
-	src/native/vm/java_lang_reflect_Constructor.c,
-	src/native/vm/reflect.c, src/native/vm/sun_misc_Unsafe.c,
-	src/threads/posix/lock.c, src/threads/posix/threads.c, src/threads
-	/threads-common.c, src/vm/Makefile.am, src/vm/access.c,
-	src/vm/builtin.c, src/vm/exceptions.c, src/vm/finalizer.c,
-	src/vm/initialize.c, src/vm/jit/allocator/simplereg.c,
-	src/vm/jit/alpha/freebsd/md-os.c, src/vm/jit/codegen-common.c,
-	src/vm/jit/i386/codegen.c, src/vm/jit/i386/cygwin/md-os.c,
-	src/vm/jit/i386/darwin/md-os.c, src/vm/jit/i386/linux/md-os.c,
-	src/vm/jit/intrp/codegen.c, src/vm/jit/m68k/codegen.c,
-	src/vm/jit/mips/irix/md-os.c, src/vm/jit/optimizing/recompile.c,
-	src/vm/jit/parse.c, src/vm/jit/powerpc/codegen.c,
-	src/vm/jit/powerpc/darwin/md-os.c, src/vm/jit/powerpc/linux/md-os.c,
-	src/vm/jit/powerpc/netbsd/md-os.c, src/vm/jit/powerpc64/codegen.c,
-	src/vm/jit/s390/codegen.c, src/vm/jit/show.c,
-	src/vm/jit/sparc64/linux/md-os.c, src/vm/jit/sparc64/solaris/md-
-	os.c, src/vm/jit/stack.c, src/vm/jit/stacktrace.c,
-	src/vm/jit/trace.c, src/vm/jit/verify/icmds.c, src/vm/jit/verify
-	/typecheck-builtins.inc, src/vm/jit/verify/typecheck-invoke.inc,
-	src/vm/jit/verify/typecheck-multianewarray.inc, src/vm/jit/verify
-	/typecheck-stackbased-gen.inc, src/vm/jit/verify/typecheck-
-	stackbased.c, src/vm/jit/verify/typecheck-typeinferer.c,
-	src/vm/jit/verify/typecheck-variablesbased-gen.inc,
-	src/vm/jit/verify/typecheck.c, src/vm/jit/verify/typeinfo.c,
-	src/vm/jit/x86_64/codegen.c, src/vm/package.c, src/vm/properties.c,
-	src/vm/resolve.c, src/vm/signal.c, src/vm/vm.c,
-	src/vmcore/Makefile.am, src/vmcore/chararray.c,
-	src/vmcore/chararray.h, src/vmcore/class.c, src/vmcore/classcache.c,
-	src/vmcore/classcache.h, src/vmcore/descriptor.c,
-	src/vmcore/field.c, src/vmcore/javastring.c,
-	src/vmcore/javastring.h, src/vmcore/linker.c, src/vmcore/loader.c,
-	src/vmcore/method.c, src/vmcore/primitivecore.c,
-	src/vmcore/stringconst.c, src/vmcore/stringconst.h,
-	src/vmcore/zip.c:
-	updated files to javastring-code. cacaoh is working, cacao is not
-	working
-	[64132fe4fa4f]
-
-2008-04-09  Andreas HUBERT  <andreas.hubert@gmx.at>
-
-	* src/vm/string.c, src/vm/stringlocal.h, src/vmcore/chararray.c,
-	src/vmcore/chararray.h, src/vmcore/javastring.c,
-	src/vmcore/javastring.h, src/vmcore/stringconst.c,
-	src/vmcore/stringconst.h, src/vmcore/utf8.c, src/vmcore/utf8.h,
-	tests/havoc.class:
-	removed old utf-code files and added new javastring files
-	[12d117fc4e5b]
-
-	* .hgignore, src/cacaoh/cacaoh.c, src/cacaoh/dummy.c,
-	src/cacaoh/headers.c, src/cacaoh/headers.h, src/native/jni.c,
-	src/native/native.c, src/native/native.h,
-	src/native/vm/gnu/gnu_classpath_VMStackWalker.c,
-	src/native/vm/gnu/gnu_classpath_VMSystemProperties.c, src/native/vm/
-	gnu/gnu_java_lang_management_VMClassLoadingMXBeanImpl.c,
-	src/native/vm/gnu/gnu_java_lang_management_VMMemoryMXBeanImpl.c,
-	src/native/vm/gnu/gnu_java_lang_management_VMRuntimeMXBeanImpl.c,
-	src/native/vm/gnu/gnu_java_lang_management_VMThreadMXBeanImpl.c,
-	src/native/vm/gnu/java_lang_VMClass.c,
-	src/native/vm/gnu/java_lang_VMClassLoader.c,
-	src/native/vm/gnu/java_lang_management_VMManagementFactory.c,
-	src/native/vm/gnu/java_lang_reflect_Constructor.c,
-	src/native/vm/gnu/java_lang_reflect_Field.c,
-	src/native/vm/gnu/java_lang_reflect_Method.c,
-	src/native/vm/gnu/java_lang_reflect_VMProxy.c,
-	src/native/vm/nativevm.c, src/threads/threads-common.c, src/threads
-	/threads-common.h, src/toolbox/hashtable.h, src/toolbox/logging.c,
-	src/toolbox/logging.h, src/vm/access.c, src/vm/builtin.c,
-	src/vm/builtin.h, src/vm/exceptions.c, src/vm/exceptions.h,
-	src/vm/finalizer.c, src/vm/initialize.c, src/vm/jit/i386/codegen.c,
-	src/vm/jit/trace.c, src/vm/package.c, src/vm/package.h,
-	src/vm/primitive.c, src/vm/primitive.h, src/vm/properties.c,
-	src/vm/resolve.c, src/vm/resolve.h, src/vm/signal.c, src/vm/vm.c,
-	src/vmcore/Makefile.am, src/vmcore/class.c, src/vmcore/class.h,
-	src/vmcore/classcache.c, src/vmcore/classcache.h,
-	src/vmcore/descriptor.c, src/vmcore/descriptor.h,
-	src/vmcore/field.c, src/vmcore/field.h, src/vmcore/linker.c,
-	src/vmcore/loader.c, src/vmcore/loader.h, src/vmcore/method.c,
-	src/vmcore/method.h, src/vmcore/primitivecore.c,
-	src/vmcore/references.h, src/vmcore/statistics.c,
-	src/vmcore/statistics.h, src/vmcore/suck.c, src/vmcore/zip.c,
-	src/vmcore/zip.h:
-	creating javastring branch with (not yet working) javastring-code
-	[73beba075e42]
-
-2008-06-27  Christian Thalinger  <twisti@complang.tuwien.ac.at>
-
-	* src/cacao/cacao.c, src/threads/Makefile.am,
-	src/threads/condition.hpp, src/threads/mutex.h,
-	src/threads/mutex.hpp, src/threads/posix/Makefile.am,
-	src/threads/posix/condition-posix.hpp, src/threads/posix/lock.c,
-	src/threads/posix/lock.h, src/threads/posix/mutex-posix.h,
-	src/threads/posix/mutex-posix.hpp, src/threads/posix/thread-posix.c,
-	src/threads/posix/thread-posix.h, src/threads/removeme.cpp,
-	src/threads/thread.h, src/threads/threadlist.c, src/vm/vm.c:
-	* src/threads/mutex.h: Renamed to...
-	* src/threads/mutex.hpp: New file.
-	* src/threads/posix/mutex-posix.h: Renamed to...
-	* src/threads/posix/mutex-posix.hpp: New file.
-	* src/threads/condition.hpp: Likewise.
-	* src/threads/posix/condition-posix.hpp: Likewise.
-	* src/threads/removeme.cpp: New file which contains legacy C wrapper.
-	This one should be removed ASAP.
-	* src/threads/Makefile.am (libthreads_la_SOURCES): Removed mutex.h,
-	added condition.hpp and removeme.cpp and mutex.hpp.
-	* src/threads/posix/Makefile.am (libthreadsposix_la_SOURCES): Removed
-	mutex-posix.h, added condition-posix.hpp and mutex-posix.hpp.
-	* src/cacao/cacao.c (threads/mutex.h): Removed. (main) [ENABLE_JVMTI]:
-	Comment added.
-	* src/vm/vm.c (threads/mutex.h): Removed. (vm_shutdown)
-	[ENABLE_JVMTI]: Comment added.
-	* src/threads/posix/lock.c, src/threads/posix/lock.h,
-	src/threads/posix/thread-posix.c, src/threads/posix/thread-posix.h,
-	src/threads/thread.h, src/threads/threadlist.c: Use new Mutex and
-	Condition functions.
-	[c259010fc9d5]
-
 2008-06-25  Christian Thalinger  <twisti@complang.tuwien.ac.at>
 
 	* configure.ac:
@@ -718,52 +379,7 @@
 	AC_CHECK_WITH_BUILD_JAVA_RUNTIME_LIBRARY_CLASSES function.
 	[ee14e5deab31]
 
-2008-06-26  Christian Thalinger  <twisti@complang.tuwien.ac.at>
-
-	* * Merged with tip.
-	[ee2a45e1e921]
-
-	* src/mm/codememory.h, src/mm/gc-common.h, src/native/localref.h,
-	src/native/native.h, src/native/vm/nativevm.h, src/threads/lock-
-	common.h, src/threads/posix/lock.h, src/threads/thread.h,
-	src/threads/threadlist.h, src/vm/array.h, src/vm/assertion.h,
-	src/vm/builtin.h, src/vm/finalizer.h, src/vm/initialize.h,
-	src/vm/jit/argument.h, src/vm/jit/methodtree.h,
-	src/vm/jit/optimizing/profile.h, src/vm/jit/optimizing/recompile.h,
-	src/vm/jit/trap.h, src/vm/primitive.h, src/vm/properties.h,
-	src/vm/signallocal.h, src/vmcore/classcache.h, src/vmcore/options.h,
-	src/vmcore/suck.h:
-	* src/mm/codememory.h, src/mm/gc-common.h, src/native/localref.h,
-	src/native/native.h, src/native/vm/nativevm.h, src/threads/lock-
-	common.h, src/threads/posix/lock.h, src/threads/thread.h,
-	src/threads/threadlist.h, src/vm/array.h, src/vm/assertion.h,
-	src/vm/builtin.h, src/vm/finalizer.h, src/vm/initialize.h,
-	src/vm/jit/argument.h, src/vm/jit/methodtree.h,
-	src/vm/jit/optimizing/profile.h, src/vm/jit/optimizing/recompile.h,
-	src/vm/jit/trap.h, src/vm/primitive.h, src/vm/properties.h,
-	src/vm/signallocal.h, src/vmcore/classcache.h, src/vmcore/options.h,
-	src/vmcore/suck.h [__cplusplus]: Added extern "C".
-	[7930f802e8e0]
-
-	* src/vm/vm.h:
-	* src/vm/vm.h [__cplusplus]: Added extern "C".
-	[d418e5769e8c]
-
 2008-06-25  Christian Thalinger  <twisti@complang.tuwien.ac.at>
-
-	* configure.ac:
-	* configure.ac (AC_CHECK_WITH_BUILD_JAVA_RUNTIME_LIBRARY_CLASSES):
-	Added.
-	[b3243bddbdb9]
-
-	* m4/java-runtime-library.m4:
-	* m4/java-runtime-library.m4 (java-runtime-library-classes): Added
-	missing ]). (build-java-runtime-library-classes): Added missing ],
-	removed duplicate ]).
-	[9d5848dcbfeb]
-
-	* * Merged with tip.
-	[fe03f8d9d4d2]
 
 	* src/vm/jit/trap.c, src/vm/signal.c:
 	* src/vm/jit/trap.c (mm/memory.h): Added.
@@ -845,261 +461,6 @@
 	Removed.
 	[3a6552a0aea2]
 
-	* src/mm/boehm-gc/include/gc.h, src/mm/boehm-gc/pthread_stop_world.c,
-	src/threads/Makefile.am, src/threads/critical.c,
-	src/threads/critical.h, src/threads/posix/thread-posix.c,
-	src/threads/thread.c, src/vm/jit/alpha/codegen.c,
-	src/vm/jit/alpha/freebsd/md-os.c, src/vm/jit/alpha/linux/md-os.c,
-	src/vm/jit/arm/codegen.c, src/vm/jit/arm/linux/md-os.c,
-	src/vm/jit/asmpart.h, src/vm/jit/codegen-common.c, src/vm/jit
-	/codegen-common.h, src/vm/jit/i386/codegen.c, src/vm/jit/i386/cygwin
-	/md-os.c, src/vm/jit/i386/darwin/md-os.c, src/vm/jit/i386/freebsd
-	/md-os.c, src/vm/jit/i386/linux/md-os.c, src/vm/jit/m68k/codegen.c,
-	src/vm/jit/mips/codegen.c, src/vm/jit/mips/irix/md-os.c,
-	src/vm/jit/mips/linux/md-os.c, src/vm/jit/mips/uclinux/md-os.c,
-	src/vm/jit/powerpc/codegen.c, src/vm/jit/powerpc/darwin/md-os.c,
-	src/vm/jit/powerpc/linux/md-os.c, src/vm/jit/powerpc/netbsd/md-os.c,
-	src/vm/jit/powerpc64/codegen.c, src/vm/jit/powerpc64/linux/md-os.c,
-	src/vm/jit/s390/codegen.c, src/vm/jit/s390/md.c,
-	src/vm/jit/sparc64/codegen.c, src/vm/jit/sparc64/linux/md-os.c,
-	src/vm/jit/sparc64/solaris/md-os.c, src/vm/jit/x86_64/codegen.c,
-	src/vm/jit/x86_64/freebsd/md-os.c, src/vm/jit/x86_64/linux/md-os.c,
-	src/vm/vm.c, src/vmcore/linker.c:
-	* src/threads/critical.c: Removed.
-	* src/threads/critical.h: Likewise.
-	* src/mm/boehm-gc/include/gc.h (GC_signum1, GC_signum2): Removed.
-	* src/mm/boehm-gc/pthread_stop_world.c (lock_stopworld)
-	(unlock_stopworld): Likewise. (GC_signum1, GC_signum2): Likewise.
-	* src/threads/Makefile.am (libthreads_la_SOURCES): Removed
-	critical.[ch].
-	* src/threads/posix/thread-posix.c (STOPWORLD_FROM_GC)
-	(STOPWORLD_FROM_CLASS_NUMBERING): Removed. (stopworldwhere):
-	Likewise. [__IRIX__] (suspend_ack_lock, suspend_cond): Likewise.
-	(lock_stopworld, unlock_stopworld, threads_cast_sendsignals)
-	(threads_cast_darwinstop, threads_cast_darwinresume)
-	(threads_cast_irixresume, threads_sigsuspend_handler): Likewise.
-	[ENABLE_GC_CACAO] (threads_stopworld, threads_startworld): Added
-	#ifdef, replaced {lock,unlock}_stopworld with mutex_{lock,unlock}.
-	[ENABLE_GC_CACAO] (threads_suspend_ack, threads_resume_thread):
-	Added #ifdef.
-	* src/threads/thread.c (threads/critical.h): Removed.
-	* src/vm/jit/asmpart.h [ENABLE_THREADS] (threads/critical.h):
-	Likewise.
-	* src/vm/jit/codegen-common.c (codegen_setup): Removed listcritical.
-	(codegen_reset): Likewise. [ENABLE_THREADS]
-	(codegen_critical_section_new) (codegen_critical_section_start,
-	codegen_critical_section_end) (codegen_critical_section_finish):
-	Removed. (codegen_finish) [ENABLE_THREADS]: Removed
-	codegen_critical_section_finish.
-	* src/vm/jit/codegen-common.h (critical_section_ref_t): Removed.
-	(codegendata): Removed listcritical. [ENABLE_THREADS]
-	(codegen_critical_section_new) (codegen_critical_section_start,
-	codegen_critical_section_end) (codegen_critical_section_finish,
-	CODEGEN_CRITICAL_SECTION_NEW) (CODEGEN_CRITICAL_SECTION_START,
-	CODEGEN_CRITICAL_SECTION_END): Removed.
-	* src/vm/vm.c (vm_create): Removed critical_init.
-	* src/vmcore/linker.c (linker_compute_subclasses): Removed obsolete
-	threads_{stop,start}world.
-	* src/vm/jit/alpha/codegen.c, src/vm/jit/arm/codegen.c,
-	src/vm/jit/i386/codegen.c, src/vm/jit/m68k/codegen.c,
-	src/vm/jit/mips/codegen.c, src/vm/jit/powerpc/codegen.c,
-	src/vm/jit/powerpc64/codegen.c, src/vm/jit/s390/codegen.c
-	(codegen_emit): Removed CODEGEN_CRITICAL_SECTION_NEW,
-	CODEGEN_CRITICAL_SECTION_START, CODEGEN_CRITICAL_SECTION_END.
-	* src/vm/jit/alpha/freebsd/md-os.c, src/vm/jit/alpha/linux/md-os.c,
-	src/vm/jit/arm/linux/md-os.c, src/vm/jit/sparc64/codegen.c,
-	src/vm/jit/x86_64/codegen.c, src/vm/jit/i386/cygwin/md-os.c,
-	src/vm/jit/i386/darwin/md-os.c, src/vm/jit/i386/freebsd/md-os.c,
-	src/vm/jit/i386/linux/md-os.c, src/vm/jit/mips/irix/md-os.c,
-	src/vm/jit/mips/linux/md-os.c, src/vm/jit/mips/uclinux/md-os.c,
-	src/vm/jit/powerpc/darwin/md-os.c, src/vm/jit/powerpc/linux/md-os.c,
-	src/vm/jit/powerpc/netbsd/md-os.c, src/vm/jit/powerpc64/linux/md-
-	os.c, src/vm/jit/s390/md.c, src/vm/jit/sparc64/linux/md-os.c,
-	src/vm/jit/sparc64/solaris/md-os.c, src/vm/jit/x86_64/freebsd/md-
-	os.c, src/vm/jit/x86_64/linux/md-os.c (md_critical_section_restart):
-	Removed.
-	[d9de19bc1127]
-
-	* src/vm/jit/trap.c, src/vm/signal.c:
-	* src/vm/jit/trap.c (mm/memory.h): Added.
-	* src/vm/signal.c [ENABLE_GC_BOEHM] (mm/memory.h): Likewise.
-	[dc074c0471a7]
-
-2008-06-24  rob  <rob@linkist.lan>
-
-	* m4/java-runtime-library.m4:
-	2008-06-24 Robert Schuster <robertschuster@fsfe.org>
-
-	 * m4/java-runtime-library.m4: Added
-	AC_CHECK_WITH_BUILD_JAVA_RUNTIME_LIBRARY_CLASSES function.
-	[fa9bb7a6969d]
-
-2008-06-22  Christian Thalinger  <twisti@complang.tuwien.ac.at>
-
-	* configure.ac, m4/threads.m4, src/cacao/Makefile.am,
-	src/cacaoh/dummy.c, src/cacaoh/headers.c, src/mm/boehm-
-	gc/configure.ac, src/mm/memory.h, src/native/jni.h,
-	src/native/vm/openjdk/jvm.c, src/toolbox/list.h, src/vm/Makefile.am,
-	src/vm/package.c, src/vm/package.cpp, src/vm/package.h,
-	src/vm/package.hpp, src/vm/vm.c, src/vmcore/loader.c:
-	This commit introduces C++ support.
-
-	* configure.ac (OPT_CXXFLAGS): New variable. (ARCH_CFLAGS): Renamed
-	to ARCH_FLAGS. (OS_FLAGS): New variable. (CC_FLAGS, CXX_FLAGS):
-	Likewise.
-	* m4/threads.m4 (ENABLE_THREADS): Set OS_FLAGS instead of ARCH_CFLAGS.
-	* src/cacao/Makefile.am (nodist_EXTRA_libjvm_la_SOURCES): Added to
-	force C++ linking.
-	* src/cacaoh/dummy.c (instruction_call_site): Added. (icmd_table):
-	Likewise. (package_add): Renamed to Package_add. [HAVE___THREAD]
-	(thread_current): Added. [!HAVE___THREAD) (thread_current_key):
-	Likewise.
-	* src/cacaoh/headers.c (printmethod): Print _this instead of this, as
-	it's a C++ keyword.
-	* src/mm/boehm-gc/configure.ac: Don't use CACAO's CFLAGS anymore.
-	* src/mm/memory.h [__cplusplus]: Added define.
-	* src/native/jni.h [__cplusplus] (_Jv_JNIEnv): Likewise. [__cplusplus]
-	(_Jv_JavaVM): Likewise.
-	* src/native/vm/openjdk/jvm.c (vm/package.h): Removed.
-	(vm/package.hpp): Added. (JVM_GetSystemPackage): Renamed
-	package_find to Package_find.
-	* src/toolbox/list.h [__cplusplus]: Added define.
-	* src/vm/Makefile.am (libvm_la_SOURCES): Removed package.[ch], added
-	package.{cpp,hpp}.
-	* src/vm/vm.c (vm/package.h): Removed. (vm/package.hpp): Added.
-	(vm_create): Renamed package_init to Package_initialize.
-	* src/vmcore/loader.c (vm/package.h): Removed. (vm/package.hpp):
-	Added. (load_class_bootstrap): Renamed package_add to Package_add.
-	* src/vm/package.c, src/vm/package.h: Moved from C...
-	* src/vm/package.cpp, src/vm/package.hpp: ...to C++.
-	[8484332b813c]
-
-	* configure.ac, m4/ifconv.m4:
-	* configure.ac (AC_CHECK_ENABLE_IFCONV): Added.
-	* m4/ifconv.m4: New file.
-	[96a1f8910261]
-
-	* configure.ac, m4/cycle-stats.m4:
-	* configure.ac (AC_CHECK_ENABLE_CYCLE_STATS): Added.
-	* m4/cycle-stats.m4: New file.
-	[1f8678296226]
-
-	* configure.ac, m4/rt-timing.m4:
-	* configure.ac (AC_CHECK_ENABLE_RT_TIMING): Added.
-	* m4/rt-timing.m4: New file.
-	[7f15bb23163a]
-
-	* configure.ac, m4/replacement.m4:
-	* configure.ac (AC_CHECK_ENABLE_REPLACEMENT): Added.
-	* m4/replacement.m4: New file.
-	[a7f47adee751]
-
-	* configure.ac, m4/inlining.m4:
-	* configure.ac (AC_CHECK_ENABLE_INLINING): Added.
-	(AC_CHECK_ENABLE_INLINING_DEBUG): Likewise.
-	* m4/inlining.m4: New file.
-	[c1dc702a398b]
-
-	* configure.ac, m4/jvmti.m4:
-	* configure.ac (AC_CHECK_ENABLE_JVMTI): Added.
-	* m4/jvmti.m4: New file.
-	[fc6a6feee69f]
-
-	* configure.ac, m4/verifier.m4:
-	* configure.ac (AC_CHECK_ENABLE_VERIFIER): Added.
-	* m4/verifier.m4: New file.
-	[ee65d125fef2]
-
-	* configure.ac, m4/statistics.m4:
-	* configure.ac (AC_CHECK_ENABLE_STATISTICS): Added.
-	* m4/statistics.m4: New file.
-	[6ab2bd4add31]
-
-	* configure.ac, m4/disassembler.m4:
-	* configure.ac (AC_CHECK_ENABLE_DISASSEMBLER): Added.
-	* m4/disassembler.m4: New file.
-	[0ca35e51b2f8]
-
-2008-06-21  Christian Thalinger  <twisti@complang.tuwien.ac.at>
-
-	* configure.ac, m4/vmlog.m4:
-	* configure.ac (AC_CHECK_ENABLE_VMLOG): Added.
-	* m4/vmlog.m4: New file.
-	[42c8ec66c87f]
-
-	* configure.ac, m4/handles.m4:
-	* configure.ac (AC_CHECK_ENABLE_HANDLES): Added.
-	* m4/handles.m4: New file.
-	[fb00ad63ee81]
-
-	* configure.ac, m4/memcheck.m4:
-	* configure.ac (AC_CHECK_ENABLE_MEMCHECK): Added.
-	* m4/memcheck.m4: New file.
-	[cee4fa6be81b]
-
-2008-06-20  Christian Thalinger  <twisti@complang.tuwien.ac.at>
-
-	* configure.ac:
-	* configure.ac: Removed stdint checks for fdlibm, I'm not sure we
-	ever needed them.
-	[fadcef38d8e6]
-
-	* src/vm/jit/powerpc/Makefile.am, src/vm/jit/powerpc/asmpart.S,
-	src/vm/jit/powerpc/atomic.hpp, src/vm/jit/powerpc/machine-instr.h:
-	* src/vm/jit/powerpc/Makefile.am (noinst_HEADERS): Removed machine-
-	instr.h, added atomic.hpp.
-	* src/vm/jit/powerpc/asmpart.S (asm_compare_and_swap): Removed.
-	(asm_memory_barrier): Likewise.
-	* src/vm/jit/powerpc/atomic.hpp: New file.
-	* src/vm/jit/powerpc/machine-instr.h: Removed.
-	[1cacc6e2690e]
-
-	* src/vm/jit/asmpart.h:
-	* src/vm/jit/asmpart.h (asm_compare_and_swap): Removed.
-	(asm_memory_barrier): Likewise.
-	[20c5ef6e022a]
-
-2008-06-19  Christian Thalinger  <twisti@complang.tuwien.ac.at>
-
-	* src/native/vm/sun_misc_Unsafe.c, src/threads/posix/lock.c,
-	src/threads/posix/thread-posix.c, src/vm/jit/x86_64/Makefile.am,
-	src/vm/jit/x86_64/asmpart.S, src/vm/jit/x86_64/atomic.hpp,
-	src/vm/jit/x86_64/machine-instr.h:
-	* src/native/vm/sun_misc_Unsafe.c: Use new atomic primitve
-	functions.
-	* src/threads/posix/lock.c: Likewise.
-	* src/threads/posix/thread-posix.c: Likewise.
-	* src/vm/jit/x86_64/Makefile.am (noinst_HEADERS): Removed machine-
-	instr.h, added atomic.hpp.
-	* src/vm/jit/x86_64/asmpart.S (asm_compare_and_swap): Removed.
-	(asm_memory_barrier): Likewise.
-	* src/vm/jit/x86_64/atomic.hpp: New file.
-	* src/vm/jit/x86_64/machine-instr.h: Removed.
-	[bd614015578d]
-
-	* src/native/jni.c:
-	* src/native/jni.c (TRACEJNICALLSENTER, TRACEJNICALLSEXIT): New
-	macro. (_Jv_JNI_NewObject): Renamed to jni_NewObject, added trace
-	macro. (_Jv_JNI_NewGlobalRef): Renamed to jni_NewGlobalRef.
-	(_Jv_JNI_DeleteGlobalRef): Renamed to jni_DeleteGlobalRef.
-	(_Jv_JNI_NewDirectByteBuffer): Renamed to jni_NewDirectByteBuffer.
-	[f2c147cbb468]
-
-2008-06-19  Stefan Ring  <stefan@complang.tuwien.ac.at>
-
-	* src/native/jni.c, src/vm/jit/x86_64/patcher.c:
-	Merged trunk.
-	[e423d35c699b]
-
-	* src/vm/jit/x86_64/codegen.c, src/vm/jit/x86_64/codegen.h:
-	Merged subtype fix.
-	[58417ed8e8a8]
-
-	* src/vm/jit/x86_64/codegen.c, src/vm/jit/x86_64/codegen.h:
-	* src/vm/jit/x86_64/codegen.c: Fixed INSTANCEOF for d == REG_ITMP2.
-	* src/vm/jit/x86_64/codegen.h: Added M_SETE.
-	[257d082704da]
-
 2008-06-19  Christian Thalinger  <twisti@complang.tuwien.ac.at>
 
 	* src/native/jni.c:
@@ -1108,13 +469,6 @@
 	containing the global reference on the GC heap.
 	(_Jv_JNI_DeleteGlobalRef): Free likewise.
 	[c898353e7208]
-
-	* src/native/jni.c:
-	Fixes PR83.
-	* src/native/jni.c (_Jv_JNI_NewGlobalRef): Allocate the data structure
-	containing the global reference on the GC heap.
-	(_Jv_JNI_DeleteGlobalRef): Free likewise.
-	[93decefa1711]
 
 	* src/native/vm/gnuclasspath/java_lang_VMThread.c,
 	src/native/vm/openjdk/jvm.c:
@@ -1127,129 +481,7 @@
 	(JVM_ResumeThread, JVM_CountStackFrames): Likewise.
 	[f9d18b31e38c]
 
-	* src/native/vm/gnuclasspath/java_lang_VMThread.c,
-	src/native/vm/openjdk/jvm.c:
-	* src/native/vm/gnuclasspath/java_lang_VMThread.c
-	(countStackFrames): Print an clear warning that this method is
-	deprecated and not implemented (see http://java.sun.com/javase/6/doc
-	s/technotes/guides/concurrency/threadPrimitiveDeprecation.html).
-	(suspend, resume, nativeStop): Likewise.
-	* src/native/vm/openjdk/jvm.c (JVM_StopThread, JVM_SuspendThread)
-	(JVM_ResumeThread, JVM_CountStackFrames): Likewise.
-	[5b86c5527a2e]
-
 2008-06-17  Christian Thalinger  <twisti@complang.tuwien.ac.at>
-
-	* NEWS:
-	* NEWS: Added 0.99.1 release notes.
-	[1d418bc57b6e]
-
-2008-06-19  Christian Thalinger  <twisti@complang.tuwien.ac.at>
-
-	* m4/junit.m4:
-	* m4/junit.m4 (AC_CHECK_WITH_JUNIT_JAR): Changed the filename to
-	junit4.jar, this is the default on Debian.
-	[d43851eb185b]
-
-2008-06-18  Stefan Ring  <stefan@complang.tuwien.ac.at>
-
-	* src/vm/jit/x86_64/patcher.c:
-	* src/vm/jit/x86_64/patcher.c (patcher_putfieldconst): Fixed.
-	[af831cc09d27]
-
-	* src/vm/builtin.c, src/vm/builtin.h, src/vm/jit/x86_64/codegen.c,
-	src/vm/jit/x86_64/codegen.h, src/vm/jit/x86_64/emit.c,
-	src/vm/jit/x86_64/emit.h:
-	Merged subtype branch.
-	[86ab8c6b5dd5]
-
-	* src/vm/jit/patcher-common.c, src/vm/jit/patcher-common.h,
-	src/vm/jit/x86_64/codegen.c, src/vm/jit/x86_64/patcher.c:
-	* src/vm/jit/patcher-common.c (patcher_add_patch_ref): Return new
-	patchref, initialize new auxiliary field.
-	* src/vm/jit/patcher-common.h (patchref_t): New auxiliary field.
-
-	* src/vm/jit/x86_64/codegen.c, src/vm/jit/x86_64/patcher.c: Patch
-	out useless mfence instructions.
-	[734fe2320322]
-
-	* src/vm/jit/x86_64/codegen.c:
-	* src/vm/jit/x86_64/codegen.c (codegen_emit): Emit mfence
-	instructions after volatile writes.
-	[ea2b8f4be496]
-
-	* src/vm/jit/x86_64/codegen.h, src/vm/jit/x86_64/emit.c,
-	src/vm/jit/x86_64/emit.h:
-	* src/vm/jit/x86_64/codegen.h: Generate mfence instruction.
-	* src/vm/jit/x86_64/emit.c, src/vm/jit/x86_64/emit.h: Likewise.
-	[864ea9d2c217]
-
-	* src/native/jni.c:
-	* src/native/jni.c (_Jv_JNI_SetObjectField): Use a memory barrier
-	for volatile fields. (_Jv_JNI_SetStaticObjectField): Likewise.
-	[d53d813a5b09]
-
-	* src/native/vm/sun_misc_Unsafe.c:
-	* src/native/vm/sun_misc_Unsafe.c
-	(Java_sun_misc_Unsafe_compareAndSwapObject): Do a real CAS.
-	(Java_sun_misc_Unsafe_compareAndSwapInt): Likewise.
-	(Java_sun_misc_Unsafe_compareAndSwapLong): Likewise.
-	(Java_sun_misc_Unsafe_putObjectVolatile): Added missing memory
-	barrier.
-	[150c0147ad3b]
-
-	* src/vm/jit/x86_64/codegen.c, src/vm/jit/x86_64/patcher.c:
-	* src/vm/jit/x86_64/codegen.c (codegen_emit PUTFIELDCONST,
-	PUTSTATICCONST): Don't split store.
-	* src/vm/jit/x86_64/patcher.c (patcher_putfieldconst): Handle
-	different machine code.
-
-	The reason is that unresolved fields might be volatile. We could
-	handle known non-volatile fields the old way and only unresolved or
-	known volatile fields the new way but I don't like that case
-	explosion. There's enough if-statements already.
-	[0d5acacad2ff]
-
-	* src/threads/posix/thread-posix.c:
-	* src/threads/posix/thread-posix.c (threads_thread_interrupt): Use
-	the same signal as Sun.
-	[46a4658ce761]
-
-2008-06-18  Christian Thalinger  <twisti@complang.tuwien.ac.at>
-
-	* src/vmcore/class.h:
-	* src/vmcore/class.h (class_getconstant): Renamed class argument to
-	c.
-	[d6c3fe682b52]
-
-	* src/vm/builtin.c, src/vm/builtin.h:
-	* src/vm/builtin.c (builtin_instanceof): Renamed class argument to
-	c, C++ doesn't like it. (builtin_checkcast): Likewise.
-	* src/vm/builtin.h: Likewise.
-	[509ce5c63609]
-
-	* configure.ac, m4/jasmin.m4, tests/regression/jasmin/Makefile.am:
-	* configure.ac (AC_CHECK_WITH_JASMIN_JAR): Added.
-	* m4/jasmin.m4: New file.
-	* tests/regression/jasmin/Makefile.am (build): Use JASMIN_JAR.
-	[cd9caf49cf6c]
-
-2008-06-17  Christian Thalinger  <twisti@complang.tuwien.ac.at>
-
-	* configure.ac, m4/junit.m4, tests/regression/base/Makefile.am,
-	tests/regression/bugzilla/Makefile.am:
-	* configure.ac (AC_CHECK_WITH_JUNIT_JAR): Added.
-	* m4/junit.m4: New file.
-	* tests/regression/base/Makefile.am (build): Use JUNIT_JAR. (run):
-	Likewise.
-	* tests/regression/bugzilla/Makefile.am (JAVACMD): Added -source 1.5
-	-target 1.5 -nowarn. (build): Use JUNIT_JAR. (run): Likewise.
-	[197ef4b7b1d6]
-
-	* tests/regression/bugzilla/All.java:
-	* tests/regression/bugzilla/All.java (Suite.SuiteClasses): Removed ,
-	for last entry. Sun's javac doesn't like it, while ECJ does.
-	[6ba37f66c4c5]
 
 	* configure.ac:
 	* configure.ac (AC_INIT): Bumped version to 1.0.0pre, again.
@@ -1269,38 +501,9 @@
 	Set -O2.
 	[f53ef222e4a0]
 
-	* tests/regression/bugzilla/All.java:
-	* tests/regression/bugzilla/All.java: Removed accidentally added
-	PR70.
-	[86c45045090d]
-
-	* tests/regression/base/All.java,
-	tests/regression/base/TestExceptionInStaticClassInitializer.java,
-	tests/regression/base/TestPatcher.java,
-	tests/regression/bugzilla/All.java,
-	tests/regression/bugzilla/PR52.java,
-	tests/regression/bugzilla/PR57.java,
-	tests/regression/bugzilla/PR58.java,
-	tests/regression/bugzilla/PR65.java,
-	tests/regression/bugzilla/PR80.java:
-	* tests/regression/base/All.java,
-	tests/regression/base/TestExceptionInStaticClassInitializer.java,
-	tests/regression/base/TestPatcher.java,
-	tests/regression/bugzilla/All.java,
-	tests/regression/bugzilla/PR52.java,
-	tests/regression/bugzilla/PR57.java,
-	tests/regression/bugzilla/PR58.java,
-	tests/regression/bugzilla/PR65.java,
-	tests/regression/bugzilla/PR80.java: Ported to JUnit 4.
-	[877abcd9243d]
-
 	* NEWS:
 	* NEWS: Added 0.99.1 release notes.
 	[268018a4e616]
-
-	* configure.ac:
-	* configure.ac ($host_os): Moved *kfreebsd*-gnu before *freebsd*.
-	[1384888f31fb]
 
 	* configure.ac:
 	* configure.ac ($host_os): Moved *kfreebsd*-gnu before *freebsd*.
@@ -1311,20 +514,10 @@
 	* contrib/svn2cl.xsl: Removed.
 	[ffbc59261a4f]
 
-	* THIRDPARTY, contrib/svn2cl.xsl:
-	* THIRDPARTY: Updated.
-	* contrib/svn2cl.xsl: Removed.
-	[231bce804212]
-
 	* contrib/Makefile.am:
 	* contrib/Makefile.am (EXTRA_DIST): New and added mapfile-vers-
 	product.
 	[9f2c8d484596]
-
-	* contrib/Makefile.am:
-	* contrib/Makefile.am (EXTRA_DIST): New and added mapfile-vers-
-	product.
-	[ecaed63de347]
 
 	* src/mm/boehm-gc/Makefile.am, src/mm/boehm-
 	gc/libatomic_ops-1.2/doc/Makefile.am, src/mm/boehm-
@@ -1348,28 +541,6 @@
 	* src/vm/jit/intrp/Makefile.am (EXTRA_DIST): Removed BUILT_SOURCES.
 	[774bfd75688c]
 
-	* src/mm/boehm-gc/Makefile.am, src/mm/boehm-
-	gc/libatomic_ops-1.2/doc/Makefile.am, src/mm/boehm-
-	gc/libatomic_ops-1.2/mkinstalldirs, src/mm/boehm-
-	gc/libatomic_ops-1.2/src/Makefile.am, src/mm/boehm-
-	gc/libatomic_ops-1.2/src/atomic_ops/Makefile.am, src/mm/boehm-
-	gc/libatomic_ops-1.2/src/atomic_ops/sysdeps/Makefile.am, src/mm
-	/boehm-gc/libatomic_ops-1.2/tests/test_atomic_include.h:
-	* src/mm/boehm-gc/Makefile.am (DISTCLEANFILES): Added.
-	* src/mm/boehm-gc/libatomic_ops-1.2/doc/Makefile.am: Don't install
-	files.
-	* src/mm/boehm-gc/libatomic_ops-1.2/src/Makefile.am, src/mm/boehm-
-	gc/libatomic_ops-1.2/src/atomic_ops/Makefile.am, src/mm/boehm-
-	gc/libatomic_ops-1.2/src/atomic_ops/sysdeps/Makefile.am: Likewise.
-	* src/mm/boehm-gc/libatomic_ops-1.2/tests/test_atomic_include.h:
-	Something changed.
-	* src/mm/boehm-gc/libatomic_ops-1.2/mkinstalldirs: Removed.
-	[b04fce856333]
-
-	* src/vm/jit/intrp/Makefile.am:
-	* src/vm/jit/intrp/Makefile.am (EXTRA_DIST): Removed BUILT_SOURCES.
-	[fb4d6f584893]
-
 	* Makefile.am:
 	* Makefile.am (EXTRA_DIST): Added ChangeLog-2006, ChangeLog-2007.
 	[97a8aff9b66d]
@@ -1378,23 +549,10 @@
 	* src/mm/boehm-gc/Makefile.am (EXTRA_DIST): Removed libtool.m4.
 	[f455432c60f8]
 
-	* Makefile.am:
-	* Makefile.am (EXTRA_DIST): Added ChangeLog-2006, ChangeLog-2007.
-	[7b111ee4736e]
-
-	* src/mm/boehm-gc/Makefile.am:
-	* src/mm/boehm-gc/Makefile.am (EXTRA_DIST): Removed libtool.m4.
-	[4459a6ba3156]
-
 	* src/threads/thread.c:
 	* src/threads/thread.c (thread_detach_current_external_thread)
 	[ENABLE_GC_BOEHM]: Don't detach main thread.
 	[3e53ea4b2f00]
-
-	* src/threads/thread.c:
-	* src/threads/thread.c (thread_detach_current_external_thread)
-	[ENABLE_GC_BOEHM]: Don't detach main thread.
-	[f01b86ba04b6]
 
 	* configure.ac, src/mm/boehm-gc/Makefile.am, src/mm/boehm-
 	gc/include/include.am:
@@ -1405,15 +563,6 @@
 	dist_noinst_HEADERS to not install headers.
 	[5d2b6d28bfa5]
 
-	* configure.ac, src/mm/boehm-gc/Makefile.am, src/mm/boehm-
-	gc/include/include.am:
-	* configure.ac (AC_PROG_RANLIB): Removed.
-	* src/mm/boehm-gc/Makefile.am (include_HEADERS, pkginclude_HEADERS):
-	Commented to not install include/gc.
-	* src/mm/boehm-gc/include/include.am (include_HEADERS): Made
-	dist_noinst_HEADERS to not install headers.
-	[8471ab91ccd5]
-
 2008-06-16  Christian Thalinger  <twisti@complang.tuwien.ac.at>
 
 	* configure.ac, src/cacao/Makefile.am:
@@ -1422,13 +571,6 @@
 	data-local, uninstall-local): New targets creating files required
 	for OpenJDK.
 	[8871f6796f2e]
-
-	* configure.ac, src/cacao/Makefile.am:
-	* configure.ac (AC_SUBST): Added JAVA_ARCH.
-	* src/cacao/Makefile.am [WITH_JAVA_RUNTIME_LIBRARY_OPENJDK] (install-
-	data-local, uninstall-local): New targets creating files required
-	for OpenJDK.
-	[59d547e55461]
 
 	* src/native/vm/nativevm.c, src/native/vm/openjdk/hpi.c,
 	src/native/vm/openjdk/jvm.c:
@@ -1439,24 +581,10 @@
 	(JVM_FindLibraryEntry): Use HPI function.
 	[b1d09d066062]
 
-	* src/native/vm/nativevm.c, src/native/vm/openjdk/hpi.c,
-	src/native/vm/openjdk/jvm.c:
-	* src/native/vm/nativevm.c (nativevm_preinit): Removed libltdl
-	stuff.
-	* src/native/vm/openjdk/hpi.c (hpi_initialize): Likewise.
-	* src/native/vm/openjdk/jvm.c (ltdl.h): Removed.
-	(JVM_FindLibraryEntry): Use HPI function.
-	[a0187730179f]
-
 	* src/classes/gnuclasspath/gnu/java/lang/CPStringBuilder.java:
 	* src/classes/gnuclasspath/gnu/java/lang/CPStringBuilder.java:
 	Updated to current CVS version.
 	[c348969dfb45]
-
-	* src/classes/gnuclasspath/gnu/java/lang/CPStringBuilder.java:
-	* src/classes/gnuclasspath/gnu/java/lang/CPStringBuilder.java:
-	Updated to current CVS version.
-	[2ed8d6c3b51f]
 
 	* src/mm/boehm-gc/libtool.m4, src/mm/boehm-gc/mkinstalldirs:
 	* src/mm/boehm-gc/libtool.m4: Removed.
@@ -1470,66 +598,13 @@
 	* src/mm/boehm-gc/libatomic_ops-1.2/autogen.sh: Removed.
 	[833b1ab8e609]
 
-	* src/mm/boehm-gc/libtool.m4, src/mm/boehm-gc/mkinstalldirs:
-	* src/mm/boehm-gc/libtool.m4: Removed.
-	* src/mm/boehm-gc/mkinstalldirs: Likewise.
-	[8caeeb0f9ea6]
-
-	* autogen.sh, src/mm/boehm-gc/autogen.sh, src/mm/boehm-
-	gc/libatomic_ops-1.2/autogen.sh:
-	* autogen.sh: Use autoreconf.
-	* src/mm/boehm-gc/autogen.sh: Removed.
-	* src/mm/boehm-gc/libatomic_ops-1.2/autogen.sh: Removed.
-	[960f8fabf4ff]
-
 2008-06-15  Christian Thalinger  <twisti@complang.tuwien.ac.at>
 
 	* src/fdlibm/ieeefp.h:
 	* src/fdlibm/ieeefp.h [__i386] (__IEEE_LITTLE_ENDIAN): Added define.
 	[0c7dc073f7bb]
 
-	* src/fdlibm/ieeefp.h:
-	* src/fdlibm/ieeefp.h [__i386] (__IEEE_LITTLE_ENDIAN): Added define.
-	[353b84e663b9]
-
-2008-06-15  Stefan Ring  <stefan@complang.tuwien.ac.at>
-
-	* src/native/jvmti/jvmti.c:
-	* src/native/jvmti/jvmti.c (GetThreadState): Removed incorrect usage
-	of sleeping.
-	[69b92de70c2c]
-
-	* src/threads/posix/thread-posix.c, src/threads/posix/thread-posix.h,
-	src/threads/thread.h:
-	Merged to new trunk.
-	[a9b5d3c8ebb6]
-
-2008-06-14  Stefan Ring  <stefan@complang.tuwien.ac.at>
-
-	* src/vm/signal.c:
-	* src/vm/signal.c (signal_thread_handler): Exit with non-zero status
-	when Ctrl-C is pressed.
-	[799d0577b13f]
-
-2008-06-13  Stefan Ring  <stefan@complang.tuwien.ac.at>
-
-	* src/threads/posix/lock.c, src/threads/posix/thread-posix.c,
-	src/threads/posix/thread-posix.h:
-	* src/threads/posix/thread-posix.h: Removed sleeping flag.
-	* src/threads/posix/thread-posix.c: Likewise.
-	* src/threads/posix/lock.c: Likewise.
-	[2a951f68a838]
-
-	* src/threads/thread.h:
-	* src/threads/thread.h: thread_is_interrupted bugfix.
-	[023499292a55]
-
 2008-06-14  Christian Thalinger  <twisti@complang.tuwien.ac.at>
-
-	* configure.ac:
-	* configure.ac (AC_INIT): Bumped version to 1.1.0pre. (OPT_CFLAGS):
-	Set -O0.
-	[13cf84055d92]
 
 	* configure.ac:
 	* configure.ac (AC_INIT): Bumped version to 1.0.0pre. (OPT_CFLAGS):
@@ -1726,39 +801,6 @@
 	* .hgtags:
 	Added tag cacao-0.97 for changeset 430cdebdf7d1
 	[32222043ce3e]
-
-2008-06-09  Stefan Ring  <stefan@complang.tuwien.ac.at>
-
-	* src/cacaoh/dummy.c, src/vm/builtin.c, src/vm/builtin.h, src/vm/jit
-	/emit-common.h, src/vm/jit/x86_64/codegen.c,
-	src/vm/jit/x86_64/codegen.h, src/vm/jit/x86_64/emit.c,
-	src/vm/jit/x86_64/emit.h, src/vmcore/class.c, src/vmcore/linker.c,
-	src/vmcore/linker.h:
-	* src/vm/builtin.c: Added fast_subtype_check.
-	(builtin_fast_canstore, builtin_fast_canstore_onedim,
-	builtin_fast_canstore_onedim_class): Using fast subtype check. Don't
-	need to lock linker_classrenumber_lock anymore.
-	* src/vm/builtin.h: Added fast_subtype_check.
-
-	* src/vm/jit/emit-common.h: Added more branch labels.
-
-	* src/vm/jit/x86_64/codegen.c (gen_method): New subtype checking
-	code.
-	* src/vm/jit/x86_64/codegen.h: Added some new mnemonics.
-	* src/vm/jit/x86_64/emit.c: New mnemonics. (emit_classcast_check): New
-	branch modes.
-	* src/vm/jit/x86_64/emit.h: New mnemonics.
-	* src/vmcore/class.c (class_isanysubclass): Using fast_subtype_check.
-
-	* src/vmcore/linker.c: Removed linker_classrenumber_lock.
-	(build_display): Implemented. (link_class_intern, link_array,
-	linker_compute_subclasses): Minor changes.
-
-	* src/vmcore/linker.h: Removed linker_compute_subclasses. Added
-	subtype-related fields to _vftbl.
-
-	* src/cacaoh/dummy.c: Added fast_subtype_check (link dependency).
-	[f4d2cd262a58]
 
 2008-06-11  Stefan Ring  <stefan@complang.tuwien.ac.at>
 
@@ -5987,24 +5029,7 @@
 	* src/vm/signal.c (signal_handle): vmlog signal type.
 	[a73070c07207]
 
-	* src/vm/signal.c:
-	* src/vm/signal.c (signal_handle): vmlog signal type.
-	[4d5807b92748]
-
-	* src/vm/jit/replace.c:
-	* src/vm/jit/replace.c (md_pop_stackframe): New function.
-	(md_push_stackframe): New function. (replace_pop_activation_record):
-	Factored out popping of the stack frame into md_pop_stackframe.
-	(replace_push_activation_record): Factored out pushing of the stack
-	frame into md_push_stackframe.
-	[32ee42dff4a2]
-
 2008-02-16  Edwin Steiner  <edwin.steiner@gmx.net>
-
-	* src/vm/jit/code.c, src/vm/jit/code.h:
-	* src/vm/jit/code.h (code_codeinfo_println): New debugging helper.
-	* src/vm/jit/code.c (code_codeinfo_println): Likewise.
-	[97ae058719af]
 
 	* contrib/vmlog/vmlog_cacao.c, contrib/vmlog/vmlog_cacao.h:
 	* contrib/vmlog/vmlog_cacao.h (vmlog_cacao_signl_type): New
