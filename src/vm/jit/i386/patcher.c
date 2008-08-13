@@ -97,11 +97,6 @@ bool patcher_get_putstatic(patchref_t *pr)
 
 	PATCH_BACK_ORIGINAL_MCODE;
 
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
-
 	/* patch the field value's address */
 
 	*((intptr_t *) (ra + 1)) = (intptr_t) fi->value;
@@ -136,11 +131,6 @@ bool patcher_getfield(patchref_t *pr)
 		return false;
 
 	PATCH_BACK_ORIGINAL_MCODE;
-
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
 
 	/* patch the field's offset */
 
@@ -181,11 +171,6 @@ bool patcher_putfield(patchref_t *pr)
 		return false;
 
 	PATCH_BACK_ORIGINAL_MCODE;
-
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
 
 	/* patch the field's offset */
 
@@ -233,11 +218,6 @@ bool patcher_putfieldconst(patchref_t *pr)
 		return false;
 
 	PATCH_BACK_ORIGINAL_MCODE;
-
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
 
 	/* patch the field's offset */
 
@@ -287,11 +267,6 @@ bool patcher_aconst(patchref_t *pr)
 
 	PATCH_BACK_ORIGINAL_MCODE;
 
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
-
 	/* patch the classinfo pointer */
 
 	*((ptrint *) (ra + 1)) = (ptrint) c;
@@ -333,11 +308,6 @@ bool patcher_builtin_multianewarray(patchref_t *pr)
 
 	PATCH_BACK_ORIGINAL_MCODE;
 
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
-
 	/* patch the classinfo pointer */
 
 	*((ptrint *) (ra + 7 + 4)) = (ptrint) c;
@@ -374,11 +344,6 @@ bool patcher_builtin_arraycheckcast(patchref_t *pr)
 		return false;
 
 	PATCH_BACK_ORIGINAL_MCODE;
-
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
 
 	/* patch the classinfo pointer */
 
@@ -420,11 +385,6 @@ bool patcher_invokestatic_special(patchref_t *pr)
 
 	PATCH_BACK_ORIGINAL_MCODE;
 
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
-
 	/* patch stubroutine */
 
 	*((ptrint *) (ra + 1)) = (ptrint) m->stubroutine;
@@ -461,11 +421,6 @@ bool patcher_invokevirtual(patchref_t *pr)
 		return false;
 
 	PATCH_BACK_ORIGINAL_MCODE;
-
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
 
 	/* patch vftbl index */
 
@@ -505,11 +460,6 @@ bool patcher_invokeinterface(patchref_t *pr)
 		return false;
 
 	PATCH_BACK_ORIGINAL_MCODE;
-
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
 
 	/* patch interfacetable index */
 
@@ -552,11 +502,6 @@ bool patcher_checkcast_instanceof_flags(patchref_t *pr)
 
 	PATCH_BACK_ORIGINAL_MCODE;
 
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
-
 	/* patch class flags */
 
 	*((s4 *) (ra + 1)) = (s4) c->flags;
@@ -596,11 +541,6 @@ bool patcher_checkcast_interface(patchref_t *pr)
 		return false;
 
 	PATCH_BACK_ORIGINAL_MCODE;
-
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
 
 	/* patch super class index */
 
@@ -645,11 +585,6 @@ bool patcher_instanceof_interface(patchref_t *pr)
 
 	PATCH_BACK_ORIGINAL_MCODE;
 
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
-
 	/* patch super class index */
 
 	*((s4 *) (ra + 6 + 2)) = (s4) c->index;
@@ -693,11 +628,6 @@ bool patcher_checkcast_class(patchref_t *pr)
 
 	PATCH_BACK_ORIGINAL_MCODE;
 
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
-
 	/* patch super class' vftbl */
 
 	*((ptrint *) (ra + 1)) = (ptrint) c->vftbl;
@@ -736,11 +666,6 @@ bool patcher_instanceof_class(patchref_t *pr)
 		return false;
 
 	PATCH_BACK_ORIGINAL_MCODE;
-
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
 
 	/* patch super class' vftbl */
 

@@ -146,11 +146,6 @@ bool patcher_get_putfield(patchref_t *pr)
 
 	PATCH_BACK_ORIGINAL_MCODE;
 
-	/* if we show disassembly, we have to skip the nop */
-
-	if (opt_shownops)
-		ra = ra + 1 * 4;
-
 	/* patch the field's offset into the instruction */
 
 	switch(fi->type) {
@@ -308,11 +303,6 @@ bool patcher_invokevirtual(patchref_t *pr)
 
 	PATCH_BACK_ORIGINAL_MCODE;
 
-	/* if we show disassembly, we have to skip the nop */
-
-	if (opt_shownops)
-		ra = ra + 1 * 4;
-
 	/* patch vftbl index */
 
 	gen_resolveload(*((s4 *) (ra + 1 * 4)), (s4) (OFFSET(vftbl_t, table[0]) + sizeof(methodptr) * m->vftblindex));
@@ -356,11 +346,6 @@ bool patcher_invokeinterface(patchref_t *pr)
 		return false;
 
 	PATCH_BACK_ORIGINAL_MCODE;
-
-	/* if we show disassembly, we have to skip the nop */
-
-	if (opt_shownops)
-		ra = ra + 1 * 4;
 
 	/* patch interfacetable index */
 

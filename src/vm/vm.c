@@ -1168,10 +1168,6 @@ bool vm_create(JavaVMInitArgs *vm_args)
 					opt_showdisassemble = true;
 					compileverbose = true;
 					break;
-
-				case 'o':
-					opt_shownops = true;
-					break;
 #endif
 
 				case 'd':

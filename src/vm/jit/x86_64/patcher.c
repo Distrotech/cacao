@@ -176,11 +176,6 @@ bool patcher_resolve_classref_to_flags(patchref_t *pr)
 
 	PATCH_BACK_ORIGINAL_MCODE;
 
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
-
 	/* patch class flags */
 
 /* 	*datap = c->flags; */
@@ -256,11 +251,6 @@ bool patcher_get_putfield(patchref_t *pr)
 
 	PATCH_BACK_ORIGINAL_MCODE;
 
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
-
 	/* Patch the field's offset: we check for the field type, because
 	   the instructions have different lengths. */
 
@@ -314,11 +304,6 @@ bool patcher_putfieldconst(patchref_t *pr)
 		return false;
 
 	PATCH_BACK_ORIGINAL_MCODE;
-
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
 
 	/* patch the field's offset */
 
@@ -414,11 +399,6 @@ bool patcher_invokevirtual(patchref_t *pr)
 
 	PATCH_BACK_ORIGINAL_MCODE;
 
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
-
 	/* patch vftbl index */
 
 	*((int32_t *) (ra + 3 + 3)) =
@@ -458,11 +438,6 @@ bool patcher_invokeinterface(patchref_t *pr)
 		return false;
 
 	PATCH_BACK_ORIGINAL_MCODE;
-
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
 
 	/* patch interfacetable index */
 
@@ -508,11 +483,6 @@ bool patcher_checkcast_interface(patchref_t *pr)
 
 	PATCH_BACK_ORIGINAL_MCODE;
 
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
-
 	/* patch super class index */
 
 	*((int32_t *) (ra + 7 + 3)) = c->index;
@@ -552,11 +522,6 @@ bool patcher_instanceof_interface(patchref_t *pr)
 		return false;
 
 	PATCH_BACK_ORIGINAL_MCODE;
-
-	/* if we show disassembly, we have to skip the nop's */
-
-	if (opt_shownops)
-		ra = ra + PATCHER_CALL_SIZE;
 
 	/* patch super class index */
 

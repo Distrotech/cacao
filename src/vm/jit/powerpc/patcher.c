@@ -291,11 +291,6 @@ bool patcher_get_putfield(patchref_t *pr)
 
 	PATCH_BACK_ORIGINAL_MCODE;
 
-	/* if we show NOPs, we have to skip them */
-
-	if (opt_shownops)
-		ra = ra + 1 * 4;
-
 	/* patch the field's offset */
 
 	if (IS_LNG_TYPE(fi->type)) {
@@ -400,11 +395,6 @@ bool patcher_invokevirtual(patchref_t *pr)
 
 	PATCH_BACK_ORIGINAL_MCODE;
 
-	/* if we show NOPs, we have to skip them */
-
-	if (opt_shownops)
-		ra = ra + 1 * 4;
-
 	/* patch vftbl index */
 
 	disp = (OFFSET(vftbl_t, table[0]) + sizeof(methodptr) * m->vftblindex);
@@ -450,11 +440,6 @@ bool patcher_invokeinterface(patchref_t *pr)
 		return false;
 
 	PATCH_BACK_ORIGINAL_MCODE;
-
-	/* if we show NOPs, we have to skip them */
-
-	if (opt_shownops)
-		ra = ra + 1 * 4;
 
 	/* patch interfacetable index */
 
@@ -514,11 +499,6 @@ bool patcher_checkcast_interface(patchref_t *pr)
 
 	PATCH_BACK_ORIGINAL_MCODE;
 
-	/* if we show NOPs, we have to skip them */
-
-	if (opt_shownops)
-		ra = ra + 1 * 4;
-
 	/* patch super class index */
 
 	disp = -(c->index);
@@ -569,11 +549,6 @@ bool patcher_instanceof_interface(patchref_t *pr)
 		return false;
 
 	PATCH_BACK_ORIGINAL_MCODE;
-
-	/* if we show NOPs, we have to skip them */
-
-	if (opt_shownops)
-		ra = ra + 1 * 4;
 
 	/* patch super class index */
 

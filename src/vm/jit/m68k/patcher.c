@@ -133,9 +133,6 @@ bool patcher_invokevirtual(patchref_t *pr)
 	/* patch back original code */
 	PATCH_BACK_ORIGINAL_MCODE;
 
-	/* if we show NOPs, we have to skip them */
-	if (opt_shownops) ra += PATCHER_CALL_SIZE;
-
 	assert( *((u2*)(ra+8)) == 0x286b);
 
 	/* patch vftbl index */
@@ -176,9 +173,6 @@ bool patcher_invokestatic_special(patchref_t *pr)
 	/* patch back original code */
 	PATCH_BACK_ORIGINAL_MCODE;
 
-	/* patch stubroutine */
-	if (opt_shownops) disp += PATCHER_CALL_SIZE;
-
 	*((ptrint *) (disp+2)) = (ptrint) m->stubroutine;
 
 	/* synchronize inst cache */
@@ -212,7 +206,6 @@ bool patcher_resolve_classref_to_classinfo(patchref_t *pr)
 	PATCH_BACK_ORIGINAL_MCODE;
 
 	/* patch the classinfo pointer */
-	if (opt_shownops) disp += PATCHER_CALL_SIZE;
 	*((ptrint *) (disp+2)) = (ptrint) c;
 
 	/* synchronize inst cache */
@@ -251,7 +244,6 @@ bool patcher_get_putstatic(patchref_t *pr)
 	md_icacheflush(pr->mpc, 2);
 
 	/* patch the field value's address */
-	if (opt_shownops) disp += PATCHER_CALL_SIZE;
 	assert(*((uint16_t*)(disp)) == 0x247c);
 	*((intptr_t *) (disp+2)) = (intptr_t) fi->value;
 
@@ -285,9 +277,6 @@ bool patcher_get_putfield(patchref_t *pr)
 	/* patch back original code */
 	PATCH_BACK_ORIGINAL_MCODE;
 	md_icacheflush(pr->mpc, 2);
-
-	/* if we show NOPs, we have to skip them */
-	if (opt_shownops) ra += PATCHER_CALL_SIZE;
 
 	/* patch the field's offset */
 	if (IS_LNG_TYPE(fi->type)) {
@@ -374,7 +363,6 @@ bool patcher_resolve_classref_to_flags(patchref_t *pr)
 	md_icacheflush(pr->mpc, 2);
 
 	/* patch class flags */
-	if (opt_shownops) disp += PATCHER_CALL_SIZE;
 	assert( (*((u2*)(disp)) == 0x263c) || (*((u2*)(disp)) == 0x283c) );
 	*((s4 *) (disp + 2)) = (s4) c->flags;
 
@@ -418,7 +406,6 @@ bool patcher_resolve_classref_to_vftbl(patchref_t *pr)
 	md_icacheflush(pr->mpc, 2);
 
 	/* patch super class' vftbl */
-	if (opt_shownops) disp += PATCHER_CALL_SIZE;
 	assert( (*((u2*)disp) == 0x287c) || (*((u2*)disp)== 0x267c) );
 
 	*((s4 *) (disp+2)) = (s4) c->vftbl;
@@ -463,9 +450,6 @@ bool patcher_instanceof_interface(patchref_t *pr)
 	PATCH_BACK_ORIGINAL_MCODE;
 	md_icacheflush(pr->mpc, 2);
 
-	/* if we show NOPs, we have to skip them */
-	if (opt_shownops) ra += PATCHER_CALL_SIZE;
-		
 	/* patch super class index */
 	disp = -(c->index);
 	assert( *((u2*)(ra + 8)) == 0xd8bc );
@@ -517,9 +501,6 @@ bool patcher_checkcast_interface(patchref_t *pr)
 	PATCH_BACK_ORIGINAL_MCODE;
 	md_icacheflush(pr->mpc, 2);
 
-	/* if we show NOPs, we have to skip them */
-	if (opt_shownops) ra += PATCHER_CALL_SIZE;
-
 	/* patch super class index */
 	disp = -(c->index);
 	assert ( *((u2 *)(ra + 8)) == 0xd8bc );
@@ -562,7 +543,6 @@ bool patcher_resolve_native_function(patchref_t *pr)
 	md_icacheflush(pr->mpc, 2);
 
 	/* patch native function pointer */
-	if (opt_shownops) disp += PATCHER_CALL_SIZE;
 	*((ptrint *) (disp + 2)) = (ptrint) f;
 
 	/* synchronize data cache */
@@ -604,7 +584,6 @@ bool patcher_invokeinterface(patchref_t *pr)
 	md_icacheflush(pr->mpc, 2);
 
 	/* if we show NOPs, we have to skip them */
-	if (opt_shownops) ra += PATCHER_CALL_SIZE;
 	assert( *((uint32_t*)ra) == 0x246f0000 );
 
 	/* patch interfacetable index (first #0) */
@@ -623,6 +602,8 @@ bool patcher_invokeinterface(patchref_t *pr)
 
 	return true;
 }
+
+
 /*
  * These are local overrides for various environment variables in Emacs.
  * Please do not remove this and leave it at the end of the file, where
