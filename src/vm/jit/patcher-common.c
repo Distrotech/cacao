@@ -330,7 +330,7 @@ java_handle_t *patcher_handler(u1 *pc)
 # if defined(ENABLE_DISASSEMBLER)
 		disassinstr((void *) pr->mpc);
 # else
-		printf("disassembler disabled\n");
+		printf("%lx at %p (disassembler disabled)\n", *((uint32_t*) pr->mpc), pr->mpc);
 # endif
 
 		patcher_depth++;
@@ -357,7 +357,7 @@ java_handle_t *patcher_handler(u1 *pc)
 # if defined(ENABLE_DISASSEMBLER)
 		disassinstr((void *) pr->mpc);
 # else
-		printf("disassembler disabled\n");
+		printf("%lx at %p (disassembler disabled)\n", *((uint32_t*) pr->mpc), pr->mpc);
 # endif
 
 		if (result == false) {
