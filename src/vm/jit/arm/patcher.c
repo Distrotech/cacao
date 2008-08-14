@@ -49,10 +49,6 @@
 #include "vm/resolve.h"
 
 
-#define PATCH_BACK_ORIGINAL_MCODE \
-    *((u4 *) pr->mpc) = (u4) pr->mcode; \
-    md_icacheflush((u1 *) pr->mpc, 1 * 4);
-
 #define gen_resolveload(inst,offset) \
 	assert((offset) >= -0x0fff && (offset) <= 0x0fff); \
 	assert(!((inst) & 0x0fff)); \
@@ -73,7 +69,8 @@
 
 void patcher_patch_code(patchref_t *pr)
 {
-	PATCH_BACK_ORIGINAL_MCODE;
+    *((uint32_t*) pr->mpc) = (uint32_t) pr->mcode;
+    md_icacheflush((void*) pr->mpc, 1 * 4);
 }
 
 
@@ -88,31 +85,25 @@ void patcher_patch_code(patchref_t *pr)
 
 bool patcher_get_putstatic(patchref_t *pr)
 {
-	unresolved_field *uf;
-	u1               *datap;
-	fieldinfo        *fi;
+	unresolved_field* uf    = (unresolved_field *) pr->ref;
+	uintptr_t*        datap = (uintptr_t*)         pr->datap;
 
-	/* get stuff from the stack */
+	// Resolve the field.
+	fieldinfo* fi = resolve_field_eager(uf);
 
-	uf    = (unresolved_field *) pr->ref;
-	datap = (u1 *)               pr->datap;
-
-	/* get the fieldinfo */
-
-	if (!(fi = resolve_field_eager(uf)))
+	if (fi == NULL)
 		return false;
 
-	/* check if the field's class is initialized */
-
+	// Check if the field's class is initialized.
 	if (!(fi->clazz->state & CLASS_INITIALIZED))
 		if (!initialize_class(fi->clazz))
 			return false;
 
-	PATCH_BACK_ORIGINAL_MCODE;
+	// Patch the field value's address.
+	*datap = (uintptr_t) fi->value;
 
-	/* patch the field value's address */
-
-	*((intptr_t *) datap) = (intptr_t) fi->value;
+	// Patch back the original code.
+	patcher_patch_code(pr);
 
 	return true;
 }
@@ -129,24 +120,16 @@ bool patcher_get_putstatic(patchref_t *pr)
 
 bool patcher_get_putfield(patchref_t *pr)
 {
-	u1                *ra;
-	u4                 mcode;
-	unresolved_field  *uf;
-	fieldinfo         *fi;
+	uint32_t*         pc = (uint32_t*)         pr->mpc;
+	unresolved_field* uf = (unresolved_field*) pr->ref;
 
-	/* get stuff from the stack */
-	ra    = (u1*)                 pr->mpc;
-	mcode =                       pr->mcode;
-	uf    = (unresolved_field*)   pr->ref;
+	// Resolve the field.
+	fieldinfo* fi = resolve_field_eager(uf);
 
-	/* get the fieldinfo */
-
-	if (!(fi = resolve_field_eager(uf)))
+	if (fi == NULL)
 		return false;
 
-	PATCH_BACK_ORIGINAL_MCODE;
-
-	/* patch the field's offset into the instruction */
+	// Patch the field's offset into the instruction.
 
 	switch(fi->type) {
 	case TYPE_ADR:
@@ -155,7 +138,7 @@ bool patcher_get_putfield(patchref_t *pr)
 	case TYPE_FLT:
 #endif
 		assert(fi->offset <= 0x0fff);
-		*((u4 *) (ra + 0 * 4)) |= (fi->offset & 0x0fff);
+		pr->mcode |= (fi->offset & 0x0fff);
 		break;
 
 	case TYPE_LNG:
@@ -163,23 +146,25 @@ bool patcher_get_putfield(patchref_t *pr)
 	case TYPE_DBL:
 #endif
 		assert((fi->offset + 4) <= 0x0fff);
-		*((u4 *) (ra + 0 * 4)) |= ((fi->offset + 0) & 0x0fff);
-		*((u4 *) (ra + 1 * 4)) &= 0xfffff000;
-		*((u4 *) (ra + 1 * 4)) |= ((fi->offset + 4) & 0x0fff);
+		pr->mcode |= ((fi->offset + 0) & 0x0fff);
+		pc[1] &= 0xfffff000;
+		pc[1] |= ((fi->offset + 4) & 0x0fff);
 		break;
 
 #if !defined(ENABLE_SOFTFLOAT)
 	case TYPE_FLT:
 	case TYPE_DBL:
 		assert(fi->offset <= 0x03ff);
-		*((u4 *) (ra + 0 * 4)) |= ((fi->offset >> 2) & 0x00ff);
+		pr->mcode |= ((fi->offset >> 2) & 0x00ff);
 		break;
 #endif
 	}
 
-	/* synchronize instruction cache */
+	// Synchronize instruction cache.
+	md_icacheflush(pc, 2 * 4);
 
-	md_icacheflush(ra, 2 * 4);
+	// Patch back the original code.
+	patcher_patch_code(pr);
 
 	return true;
 }
@@ -212,25 +197,20 @@ bool patcher_get_putfield(patchref_t *pr)
 
 bool patcher_resolve_classref_to_classinfo(patchref_t *pr)
 {
-	constant_classref *cr;
-	u1                *datap;
-	classinfo         *c;
+	constant_classref* cr    = (constant_classref *) pr->ref;
+	uintptr_t*         datap = (uintptr_t*)          pr->datap;
 
-	/* get stuff from the stack */
+	// Resolve the class.
+	classinfo* c = resolve_classref_eager(cr);
 
-	cr    = (constant_classref *) pr->ref;
-	datap = (u1 *)                pr->datap;
-
-	/* get the classinfo */
-
-	if (!(c = resolve_classref_eager(cr)))
+	if (c == NULL)
 		return false;
 
-	PATCH_BACK_ORIGINAL_MCODE;
+	// Patch the classinfo pointer.
+	*datap = (uintptr_t) c;
 
-	/* patch the classinfo pointer */
-
-	*((ptrint *) datap) = (ptrint) c;
+	// Patch back the original code.
+	patcher_patch_code(pr);
 
 	return true;
 }
@@ -249,25 +229,20 @@ bool patcher_resolve_classref_to_classinfo(patchref_t *pr)
 
 bool patcher_invokestatic_special(patchref_t *pr)
 {
-	unresolved_method *um;
-	u1                *datap;
-	methodinfo        *m;
+	unresolved_method* um    = (unresolved_method*) pr->ref;
+	uintptr_t*         datap = (uintptr_t*)         pr->datap;
 
-	/* get stuff from the stack */
+	// Reolve the method.
+	methodinfo* m = resolve_method_eager(um);
 
-	um    = (unresolved_method*) pr->ref;
-	datap = (u1 *)               pr->datap;
-
-	/* get the methodinfo */
-
-	if (!(m = resolve_method_eager(um)))
+	if (m == NULL)
 		return false;
 
-	PATCH_BACK_ORIGINAL_MCODE;
+	// Patch stubroutine.
+	*datap = (uintptr_t) m->stubroutine;
 
-	/* patch stubroutine */
-
-	*((ptrint *) datap) = (ptrint) m->stubroutine;
+	// Patch back the original code.
+	patcher_patch_code(pr);
 
 	return true;
 }
@@ -287,29 +262,23 @@ bool patcher_invokestatic_special(patchref_t *pr)
 
 bool patcher_invokevirtual(patchref_t *pr)
 {
-	u1                *ra;
-	unresolved_method *um;
-	methodinfo        *m;
+	uint32_t*          pc = (uint32_t*)           pr->mpc;
+	unresolved_method* um = (unresolved_method *) pr->ref;
 
-	/* get stuff from the stack */
+	// Resolve the method.
+	methodinfo* m = resolve_method_eager(um);
 
-	ra = (u1 *)                pr->mpc;
-	um = (unresolved_method *) pr->ref;
-
-	/* get the methodinfo */
-
-	if (!(m = resolve_method_eager(um)))
+	if (m == NULL)
 		return false;
 
-	PATCH_BACK_ORIGINAL_MCODE;
+	// Patch vftbl index.
+	gen_resolveload(pc[1], (int32_t) (OFFSET(vftbl_t, table[0]) + sizeof(methodptr) * m->vftblindex));
 
-	/* patch vftbl index */
+	// Synchronize instruction cache.
+	md_icacheflush(pc + 1, 1 * 4);
 
-	gen_resolveload(*((s4 *) (ra + 1 * 4)), (s4) (OFFSET(vftbl_t, table[0]) + sizeof(methodptr) * m->vftblindex));
-
-	/* synchronize instruction cache */
-
-	md_icacheflush(ra + 1 * 4, 1 * 4);
+	// Patch back the original code.
+	patcher_patch_code(pr);
 
 	return true;
 }
@@ -331,33 +300,26 @@ bool patcher_invokevirtual(patchref_t *pr)
 
 bool patcher_invokeinterface(patchref_t *pr)
 {
-	u1                *ra;
-	unresolved_method *um;
-	methodinfo        *m;
+	uint32_t*          pc = (uint32_t*)           pr->mpc;
+	unresolved_method* um = (unresolved_method *) pr->ref;
 
-	/* get stuff from the stack */
+	// Resolve the method.
+	methodinfo* m = resolve_method_eager(um);
 
-	ra = (u1 *)                pr->mpc;
-	um = (unresolved_method *) pr->ref;
-
-	/* get the methodinfo */
-
-	if (!(m = resolve_method_eager(um)))
+	if (m == NULL)
 		return false;
 
-	PATCH_BACK_ORIGINAL_MCODE;
+	// Patch interfacetable index.
+	gen_resolveload(pc[1], (int32_t) (OFFSET(vftbl_t, interfacetable[0]) - sizeof(methodptr*) * m->clazz->index));
 
-	/* patch interfacetable index */
+	// Patch method offset.
+	gen_resolveload(pc[2], (int32_t) (sizeof(methodptr) * (m - m->clazz->methods)));
 
-	gen_resolveload(*((s4 *) (ra + 1 * 4)), (s4) (OFFSET(vftbl_t, interfacetable[0]) - sizeof(methodptr*) * m->clazz->index));
+	// Synchronize instruction cache.
+	md_icacheflush(pc + 1, 2 * 4);
 
-	/* patch method offset */
-
-	gen_resolveload(*((s4 *) (ra + 2 * 4)), (s4) (sizeof(methodptr) * (m - m->clazz->methods)));
-
-	/* synchronize instruction cache */
-
-	md_icacheflush(ra + 1 * 4, 2 * 4);
+	// Patch back the original code.
+	patcher_patch_code(pr);
 
 	return true;
 }
@@ -373,25 +335,20 @@ bool patcher_invokeinterface(patchref_t *pr)
 
 bool patcher_resolve_classref_to_flags(patchref_t *pr)
 {
-	constant_classref *cr;
-	u1                *datap;
-	classinfo         *c;
+	constant_classref* cr    = (constant_classref*) pr->ref;
+	int32_t*           datap = (int32_t*)           pr->datap;
 
-	/* get stuff from the stack */
+	// Resolve the class.
+	classinfo* c = resolve_classref_eager(cr);
 
-	cr    = (constant_classref *) pr->ref;
-	datap = (u1 *)                pr->datap;
-
-	/* get the classinfo */
-
-	if (!(c = resolve_classref_eager(cr)))
+	if (c == NULL)
 		return false;
 
-	PATCH_BACK_ORIGINAL_MCODE;
+	// Patch class flags.
+	*datap = (int32_t) c->flags;
 
-	/* patch class flags */
-
-	*((s4 *) datap) = (s4) c->flags;
+	// Patch back the original code.
+	patcher_patch_code(pr);
 
 	return true;
 }
@@ -407,25 +364,20 @@ bool patcher_resolve_classref_to_flags(patchref_t *pr)
 
 bool patcher_resolve_classref_to_index(patchref_t *pr)
 {
-	constant_classref *cr;
-	u1                *datap;
-	classinfo         *c;
+	constant_classref* cr    = (constant_classref*) pr->ref;
+	int32_t*           datap = (int32_t*)           pr->datap;
 
-	/* get stuff from the stack */
+	// Resolve the class.
+	classinfo* c = resolve_classref_eager(cr);
 
-	cr    = (constant_classref *) pr->ref;
-	datap = (u1 *)                pr->datap;
-
-	/* get the classinfo */
-
-	if (!(c = resolve_classref_eager(cr)))
+	if (c == NULL)
 		return false;
 
-	PATCH_BACK_ORIGINAL_MCODE;
+	// Patch super class index.
+	*datap = (int32_t) c->index;
 
-	/* patch super class index */
-
-	*((s4 *) datap) = (s4) c->index;
+	// Patch back the original code.
+	patcher_patch_code(pr);
 
 	return true;
 }
@@ -441,25 +393,21 @@ bool patcher_resolve_classref_to_index(patchref_t *pr)
 
 bool patcher_resolve_classref_to_vftbl(patchref_t *pr)
 {
-	constant_classref *cr;
-	u1                *datap;
-	classinfo         *c;
+	constant_classref* cr    = (constant_classref*) pr->ref;
+	uintptr_t*         datap = (uintptr_t*)         pr->datap;
 
-	/* get stuff from the stack */
+	// Resolve the class.
 
-	cr    = (constant_classref *) pr->ref;
-	datap = (u1 *)                pr->datap;
+	classinfo* c = resolve_classref_eager(cr);
 
-	/* get the classinfo */
-
-	if (!(c = resolve_classref_eager(cr)))
+	if (c == NULL)
 		return false;
 
-	PATCH_BACK_ORIGINAL_MCODE;
+	// Patch super class' vftbl.
+	*datap = (uintptr_t) c->vftbl;
 
-	/* patch super class' vftbl */
-
-	*((ptrint *) datap) = (ptrint) c->vftbl;
+	// Patch back the original code.
+	patcher_patch_code(pr);
 
 	return true;
 }
