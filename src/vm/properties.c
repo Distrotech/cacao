@@ -386,7 +386,7 @@ void properties_set(void)
 	{
 		/* XXX We don't support java.lang.Compiler */
 /*  		properties_add("java.compiler", "cacao.jit"); */
-		properties_add("java.vm.info", "JIT mode");
+		properties_add("java.vm.info", "compiled mode");
 	}
 
 # if defined(WITH_JAVA_RUNTIME_LIBRARY_GNU_CLASSPATH)
