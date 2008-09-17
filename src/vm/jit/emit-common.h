@@ -45,6 +45,10 @@
 #define BRANCH_LABEL_4    4
 #define BRANCH_LABEL_5    5
 #define BRANCH_LABEL_6    6
+#define BRANCH_LABEL_7    7
+#define BRANCH_LABEL_8    8
+#define BRANCH_LABEL_9    9
+#define BRANCH_LABEL_10  10
 
 
 /* constant range macros ******************************************************/
@@ -156,6 +160,7 @@ void emit_label_br(codegendata *cd, s4 label);
 
 #if SUPPORT_BRANCH_CONDITIONAL_ONE_INTEGER_REGISTER
 void emit_label_beqz(codegendata *cd, s4 label, s4 reg);
+void emit_label_bnez(codegendata *cd, s4 label, s4 reg);
 #endif
 
 #if SUPPORT_BRANCH_CONDITIONAL_CONDITION_REGISTER
