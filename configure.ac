@@ -74,11 +74,16 @@ m68k )
     JAVA_ARCH="m68k"
     ;;
 
-mips | mipsel )
+mips )
     ARCH_DIR="mips"
     ARCH_CFLAGS="-D__MIPS__"
-    dnl Is this correct for mipsel?
     JAVA_ARCH="mips"
+    ;;
+
+mipsel )
+    ARCH_DIR="mips"
+    ARCH_CFLAGS="-D__MIPS__"
+    JAVA_ARCH="mipsel"
     ;;
 
 powerpc )
