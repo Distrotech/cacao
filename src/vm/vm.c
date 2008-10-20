@@ -202,6 +202,8 @@ enum {
 	OPT_MS,
 	OPT_MX,
 
+	OPT_XCHECK_JNI,
+
 	/* CACAO options */
 
 	OPT_VERBOSE1,
@@ -395,6 +397,8 @@ opt_struct opts[] = {
 	{ "mx",                true,  OPT_MX },
 	{ "Xss",               true,  OPT_SS },
 	{ "ss",                true,  OPT_SS },
+
+	{ "Xcheck:jni",        false, OPT_XCHECK_JNI },
 
 #if defined(ENABLE_PROFILING)
 	{ "Xprof:",            true,  OPT_PROF_OPTION },
@@ -1030,6 +1034,10 @@ bool vm_create(JavaVMInitArgs *vm_args)
 				else
 					opt_stacksize = j;
 			}
+			break;
+
+		case OPT_XCHECK_JNI:
+			// HotSpot compatibility option.
 			break;
 
 		case OPT_VERBOSE1:
