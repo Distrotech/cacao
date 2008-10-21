@@ -294,6 +294,12 @@ void exceptions_throw_classformaterror(classinfo *c, const char *message, ...)
 	abort();
 }
 
+void exceptions_throw_illegalargumentexception(void)
+{
+	fprintf(stderr, "java.lang.IllegalArgumentException");
+	abort();
+}
+
 void exceptions_throw_incompatibleclasschangeerror(classinfo *c, const char *message)
 {
 	fprintf(stderr, "java.lang.IncompatibleClassChangeError: ");
