@@ -92,6 +92,10 @@ classinfo *resolve_classref_or_classinfo_eager(classref_or_classinfo cls, bool c
 static s4 interfaceindex;       /* sequential numbering of interfaces         */
 static s4 classvalue;
 
+#if !USES_NEW_SUBTYPE
+java_object_t *linker_classrenumber_lock;
+#endif
+
 
 /* private functions **********************************************************/
 
@@ -162,6 +166,14 @@ void linker_preinit(void)
 	/* Reset interface index. */
 
 	interfaceindex = 0;
+
+#if defined(ENABLE_THREADS) && !USES_NEW_SUBTYPE
+	/* create the global lock object */
+
+	linker_classrenumber_lock = NEW(java_object_t);
+
+	LOCK_INIT_OBJECT_LOCK(linker_classrenumber_lock);
+#endif
 
 	/* Link the most basic classes. */
 
@@ -550,6 +562,7 @@ static bool linker_overwrite_method(methodinfo *mg,
 	
 *******************************************************************************/
 
+#if USES_NEW_SUBTYPE
 static int build_display_inner(classinfo *topc, classinfo *c, int i)
 {
 	int depth;
@@ -580,7 +593,7 @@ static int build_display_inner(classinfo *topc, classinfo *c, int i)
 	{
 		if (depth == DISPLAY_SIZE)
 		{
-			topc->vftbl->subtype_overflow = malloc(sizeof(void*) * (i+1));
+			topc->vftbl->subtype_overflow = MNEW(vftbl_t *, i+1);
 #if defined(ENABLE_STATISTICS)
 			if (opt_stat)
 				count_vftbl_len += sizeof(void*) * (i+1);
@@ -611,6 +624,7 @@ static void build_display(classinfo *c)
 			c->vftbl->subtype_display[i] = NULL;
 	}
 }
+#endif
 
 static classinfo *link_class_intern(classinfo *c)
 {
@@ -1031,7 +1045,9 @@ static classinfo *link_class_intern(classinfo *c)
 	/* FIXME: this is completely useless now */
 	RT_TIMING_GET_TIME(time_subclasses);
 
+#if USES_NEW_SUBTYPE
 	build_display(c);
+#endif
 
 	/* revert the linking state and class is linked */
 
@@ -1232,10 +1248,14 @@ static arraydescriptor *link_array(classinfo *c)
 
 static void linker_compute_subclasses(classinfo *c)
 {
+	LOCK_CLASSRENUMBER_LOCK;
+
 	if (!(c->flags & ACC_INTERFACE)) {
 		c->nextsub = NULL;
 		c->sub     = NULL;
+#if USES_NEW_SUBTYPE
 		c->vftbl->baseval = 1; /* so it does not look like an interface */
+#endif
 	}
 
 	if (!(c->flags & ACC_INTERFACE) && (c->super != NULL)) {
@@ -1244,6 +1264,14 @@ static void linker_compute_subclasses(classinfo *c)
 	}
 
 	classvalue = 0;
+
+#if !USES_NEW_SUBTYPE
+	/* compute class values */
+
+	linker_compute_class_values(class_java_lang_Object);
+#endif
+
+	UNLOCK_CLASSRENUMBER_LOCK;
 
 }
 
