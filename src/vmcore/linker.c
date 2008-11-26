@@ -564,7 +564,7 @@ static bool linker_overwrite_method(methodinfo *mg,
 
 *******************************************************************************/
 
-static void build_display(classinfo *c)
+static classinfo *build_display(classinfo *c)
 {
 	int depth, i;
 	int depth_fixed;
@@ -591,7 +591,8 @@ static void build_display(classinfo *c)
 		super = c->super;
 	} while (false);
 	if (super) {
-		build_display(super);
+		if (!link_class(super))
+			return NULL;
 		depth = super->vftbl->subtype_depth + 1;
 	} else
 		/* java.lang.Object doesn't have a super class. */
@@ -619,6 +620,8 @@ static void build_display(classinfo *c)
 		c->vftbl->subtype_display[i] = NULL;
 	c->vftbl->subtype_offset = OFFSET(vftbl_t, subtype_display[0]) + sizeof(vftbl_t*) * depth_fixed;
 	c->vftbl->subtype_depth = depth;
+
+	return c;
 }
 #endif
 
@@ -1050,7 +1053,8 @@ static classinfo *link_class_intern(classinfo *c)
 	RT_TIMING_GET_TIME(time_subclasses);
 
 #if USES_NEW_SUBTYPE
-	build_display(c);
+	if (!build_display(c))
+		return NULL;
 #endif
 
 	/* revert the linking state and class is linked */
