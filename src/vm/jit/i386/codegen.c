@@ -611,7 +611,7 @@ bool codegen_emit(jitdata *jd)
 				patcher_add_patch_ref(jd, PATCHER_aconst,
 									iptr->sx.val.c.ref, 0);
 
-				M_MOV_IMM(NULL, d);
+				M_MOV_IMM2(NULL, d);
 
 			} else {
 				if (iptr->sx.val.anyptr == NULL)
@@ -2201,7 +2201,7 @@ bool codegen_emit(jitdata *jd)
 					patcher_add_patch_ref(jd, PATCHER_initialize_class, fi->clazz, 0);
   			}
 
-			M_MOV_IMM(disp, REG_ITMP1);
+			M_MOV_IMM2(disp, REG_ITMP1);
 			switch (fieldtype) {
 			case TYPE_INT:
 			case TYPE_ADR:
@@ -2242,7 +2242,7 @@ bool codegen_emit(jitdata *jd)
 					patcher_add_patch_ref(jd, PATCHER_initialize_class, fi->clazz, 0);
   			}
 
-			M_MOV_IMM(disp, REG_ITMP1);
+			M_MOV_IMM2(disp, REG_ITMP1);
 			switch (fieldtype) {
 			case TYPE_INT:
 			case TYPE_ADR:
@@ -2284,7 +2284,7 @@ bool codegen_emit(jitdata *jd)
 					patcher_add_patch_ref(jd, PATCHER_initialize_class, fi->clazz, 0);
   			}
 
-			M_MOV_IMM(disp, REG_ITMP1);
+			M_MOV_IMM2(disp, REG_ITMP1);
 			switch (fieldtype) {
 			case TYPE_INT:
 			case TYPE_ADR:
@@ -2993,7 +2993,7 @@ gen_method:
 					d = lm->parseddesc->returntype.type;
 				}
 
-				M_MOV_IMM(disp, REG_ITMP2);
+				M_MOV_IMM2(disp, REG_ITMP2);
 				M_CALL(REG_ITMP2);
 				break;
 
@@ -3115,7 +3115,7 @@ gen_method:
 					patcher_add_patch_ref(jd, PATCHER_checkcast_instanceof_flags,
 										iptr->sx.s23.s3.c.ref, 0);
 
-					M_MOV_IMM(0, REG_ITMP2);                  /* super->flags */
+					M_MOV_IMM2(0, REG_ITMP2);                 /* super->flags */
 					M_AND_IMM32(ACC_INTERFACE, REG_ITMP2);
 					emit_label_beq(cd, BRANCH_LABEL_2);
 				}
@@ -3172,7 +3172,7 @@ gen_method:
 											iptr->sx.s23.s3.c.ref,
 											0);
 					}
-					M_MOV_IMM(supervftbl, REG_ITMP3);
+					M_MOV_IMM2(supervftbl, REG_ITMP3);
 
 					if (super == NULL || super->vftbl->subtype_depth >= DISPLAY_SIZE) {
 						M_ILD(REG_ITMP1, REG_ITMP3, OFFSET(vftbl_t, subtype_offset));
@@ -3285,7 +3285,7 @@ gen_method:
 				patcher_add_patch_ref(jd, PATCHER_checkcast_instanceof_flags,
 									iptr->sx.s23.s3.c.ref, 0);
 
-				M_MOV_IMM(0, REG_ITMP3);                      /* super->flags */
+				M_MOV_IMM2(0, REG_ITMP3);                     /* super->flags */
 				M_AND_IMM32(ACC_INTERFACE, REG_ITMP3);
 				emit_label_beq(cd, BRANCH_LABEL_2);
 			}
@@ -3345,7 +3345,7 @@ gen_method:
 					patcher_add_patch_ref(jd, PATCHER_instanceof_class,
 										iptr->sx.s23.s3.c.ref, 0);
 				}
-				M_MOV_IMM(supervftbl, REG_ITMP3);
+				M_MOV_IMM2(supervftbl, REG_ITMP3);
 
 				if (super == NULL || super->vftbl->subtype_depth >= DISPLAY_SIZE) {
 					M_ILD(REG_ITMP1, REG_ITMP3, OFFSET(vftbl_t, subtype_offset));
