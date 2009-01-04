@@ -92,7 +92,9 @@ classinfo *resolve_classref_or_classinfo_eager(classref_or_classinfo cls, bool c
 static s4 interfaceindex;       /* sequential numbering of interfaces         */
 static s4 classvalue;
 
+#if !USES_NEW_SUBTYPE
 java_object_t *linker_classrenumber_lock;
+#endif
 
 
 /* private functions **********************************************************/
@@ -165,7 +167,7 @@ void linker_preinit(void)
 
 	interfaceindex = 0;
 
-#if defined(ENABLE_THREADS)
+#if defined(ENABLE_THREADS) && !USES_NEW_SUBTYPE
 	/* create the global lock object */
 
 	linker_classrenumber_lock = NEW(java_object_t);
@@ -551,6 +553,77 @@ static bool linker_overwrite_method(methodinfo *mg,
 	return true;
 }
 
+
+#if USES_NEW_SUBTYPE
+/* build_display ***************************************************************
+
+   Builds the entire display for a class. This entails filling the fixed part
+   as well as allocating and initializing the overflow part.
+
+   See Cliff Click and John Rose: Fast subtype checking in the Hotspot JVM.
+
+*******************************************************************************/
+
+static classinfo *build_display(classinfo *c)
+{
+	int depth, i;
+	int depth_fixed;
+	classinfo *super;
+
+	do {
+		/* Handle arrays. */
+		if (c->vftbl->arraydesc) {
+			arraydescriptor *a = c->vftbl->arraydesc;
+			if (a->elementvftbl && a->elementvftbl->clazz->super) {
+				classinfo *cls = a->elementvftbl->clazz->super;
+				int n;
+				for (n=0; n<a->dimension; n++)
+					cls = class_array_of(cls, true);
+				super = cls;
+				break;
+			}
+			if (a->componentvftbl && a->elementvftbl) {
+				super = a->componentvftbl->clazz;
+				break;
+			}
+		}
+		/* Normal classes. */
+		super = c->super;
+	} while (false);
+	if (super) {
+		if (!link_class(super))
+			return NULL;
+		depth = super->vftbl->subtype_depth + 1;
+	} else
+		/* java.lang.Object doesn't have a super class. */
+		depth = 0;
+
+	/* Now copy super's display, append c->vftbl and initialize the remaining fields. */
+	if (depth >= DISPLAY_SIZE) {
+		c->vftbl->subtype_overflow = MNEW(vftbl_t *, depth - DISPLAY_SIZE + 1);
+#if defined(ENABLE_STATISTICS)
+		if (opt_stat)
+			count_vftbl_len += sizeof(vftbl_t*) * (depth - DISPLAY_SIZE + 1);
+#endif
+		memcpy(c->vftbl->subtype_overflow, super->vftbl->subtype_overflow, sizeof(vftbl_t*) * (depth - DISPLAY_SIZE));
+		c->vftbl->subtype_overflow[depth - DISPLAY_SIZE] = c->vftbl;
+		depth_fixed = DISPLAY_SIZE;
+	}
+	else {
+		depth_fixed = depth;
+		c->vftbl->subtype_display[depth] = c->vftbl;
+	}
+
+	if (super)
+		memcpy(c->vftbl->subtype_display, super->vftbl->subtype_display, sizeof(vftbl_t*) * depth_fixed);
+	for (i=depth_fixed+1; i<=DISPLAY_SIZE; i++)
+		c->vftbl->subtype_display[i] = NULL;
+	c->vftbl->subtype_offset = OFFSET(vftbl_t, subtype_display[0]) + sizeof(vftbl_t*) * depth_fixed;
+	c->vftbl->subtype_depth = depth;
+
+	return c;
+}
+#endif
 
 /* link_class_intern ***********************************************************
 
@@ -976,7 +1049,13 @@ static classinfo *link_class_intern(classinfo *c)
 
 	linker_compute_subclasses(c);
 
+	/* FIXME: this is completely useless now */
 	RT_TIMING_GET_TIME(time_subclasses);
+
+#if USES_NEW_SUBTYPE
+	if (!build_display(c))
+		return NULL;
+#endif
 
 	/* revert the linking state and class is linked */
 
@@ -1177,11 +1256,14 @@ static arraydescriptor *link_array(classinfo *c)
 
 static void linker_compute_subclasses(classinfo *c)
 {
-	LOCK_MONITOR_ENTER(linker_classrenumber_lock);
+	LOCK_CLASSRENUMBER_LOCK;
 
 	if (!(c->flags & ACC_INTERFACE)) {
 		c->nextsub = NULL;
 		c->sub     = NULL;
+#if USES_NEW_SUBTYPE
+		c->vftbl->baseval = 1; /* so it does not look like an interface */
+#endif
 	}
 
 	if (!(c->flags & ACC_INTERFACE) && (c->super != NULL)) {
@@ -1191,11 +1273,14 @@ static void linker_compute_subclasses(classinfo *c)
 
 	classvalue = 0;
 
+#if !USES_NEW_SUBTYPE
 	/* compute class values */
 
 	linker_compute_class_values(class_java_lang_Object);
+#endif
 
-	LOCK_MONITOR_EXIT(linker_classrenumber_lock);
+	UNLOCK_CLASSRENUMBER_LOCK;
+
 }
 
 

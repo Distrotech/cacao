@@ -1592,12 +1592,16 @@ bool class_isanysubclass(classinfo *sub, classinfo *super)
 		if (sub->flags & ACC_INTERFACE)
 			return (super == class_java_lang_Object);
 
-		LOCK_MONITOR_ENTER(linker_classrenumber_lock);
+#if USES_NEW_SUBTYPE
+		result = fast_subtype_check(sub->vftbl, super->vftbl);
+#else
+		LOCK_CLASSRENUMBER_LOCK;
 
 		diffval = sub->vftbl->baseval - super->vftbl->baseval;
 		result  = diffval <= (uint32_t) super->vftbl->diffval;
 
-		LOCK_MONITOR_EXIT(linker_classrenumber_lock);
+		UNLOCK_CLASSRENUMBER_LOCK;
+#endif
 	}
 
 	return result;
