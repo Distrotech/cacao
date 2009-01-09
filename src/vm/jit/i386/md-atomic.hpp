@@ -48,7 +48,8 @@ inline static uint32_t Atomic_compare_and_swap_32(volatile uint32_t *p, uint32_t
 
 	__asm__ __volatile__ ("lock; cmpxchgl %2, %1"
 						  : "=a" (result), "=m" (*p)
-						  : "r" (newval), "m" (*p), "0" (oldval));
+						  : "r" (newval), "m" (*p), "0" (oldval)
+						  : "cc", "memory");
 
 	return result;
 }
