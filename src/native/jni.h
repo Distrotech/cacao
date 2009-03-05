@@ -63,6 +63,11 @@
 #include "vmcore/method.h"
 
 
+// Some additional JNI version numbers, we currently support JNI 1.6.
+#define JNI_VERSION_SUPPORTED JNI_VERSION_1_6
+#define JNI_VERSION_CACAO     0xcaca0000
+
+
 /* _Jv_JNIEnv *****************************************************************/
 
 typedef struct _Jv_JNIEnv _Jv_JNIEnv;
