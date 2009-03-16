@@ -1,3 +1,11 @@
+New in release 0.99.4 (March 16, 2009)
+
+  * New subtype checking code fixes unexpected class cast exceptions
+    and no longer needs critical sections in JIT code.
+  * Fixed race condition in patcher subsystem which caused illegal
+    instructions and segmentation faults (PR85).
+  * Fixed PR112, PR116, PR118, PR122.
+
 New in release 0.99.3 (August 12, 2008)
 
   * Fixed PR93 (Process.destroy() now works correctly).
